@@ -1,0 +1,20 @@
+---
+import { categoryLabel } from "../consts";
+
+interface Props {
+  category: string;
+  size?: "sm" | "md";
+  asLink?: boolean;
+}
+const { category, size = "sm", asLink = true } = Astro.props;
+const label = categoryLabel(category);
+const cls = [
+  "inline-flex items-center rounded-full border border-accent/20 dark:border-accent-dark/30 bg-accent/5 dark:bg-accent-dark/10 text-accent dark:text-accent-dark uppercase tracking-wider no-underline",
+  size === "md" ? "px-3 py-1 text-xs" : "px-2 py-0.5 text-[0.65rem]",
+].join(" ");
+---
+{asLink ? (
+  <a href={`/category/${category}`} class={cls}>{label}</a>
+) : (
+  <span class={cls}>{label}</span>
+)}

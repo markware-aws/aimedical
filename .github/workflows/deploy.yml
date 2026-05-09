@@ -1,0 +1,62 @@
+name: Deploy frontend to S3
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "fe/**"
+      - ".github/workflows/deploy.yml"
+  workflow_dispatch:
+
+permissions:
+  id-token: write
+  contents: read
+
+env:
+  AWS_REGION: eu-central-1
+  S3_BUCKET: aimedical-frontend
+  AWS_ROLE_ARN: arn:aws:iam::000000000000:role/github-actions-deployer
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: fe
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+          cache-dependency-path: fe/package-lock.json
+
+      - run: npm ci
+
+      - run: npm run build
+        env:
+          SITE_URL: https://aimedical.gr
+
+      - uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: ${{ env.AWS_ROLE_ARN }}
+          aws-region: ${{ env.AWS_REGION }}
+
+      - name: Sync immutable assets
+        run: |
+          aws s3 sync dist/ s3://${{ env.S3_BUCKET }}/ \
+            --delete \
+            --cache-control "public, max-age=31536000, immutable" \
+            --exclude "*.html" \
+            --exclude "rss.xml" \
+            --exclude "sitemap*.xml"
+
+      - name: Sync HTML and feeds (short cache)
+        run: |
+          aws s3 sync dist/ s3://${{ env.S3_BUCKET }}/ \
+            --cache-control "public, max-age=300" \
+            --exclude "*" \
+            --include "*.html" \
+            --include "rss.xml" \
+            --include "sitemap*.xml"

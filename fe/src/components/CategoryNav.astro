@@ -1,0 +1,22 @@
+---
+import { CATEGORIES } from "../consts";
+const visible = CATEGORIES.filter((c) => c.slug !== "other");
+const current = Astro.url.pathname;
+---
+<nav aria-label="Κατηγορίες" class="-mx-2 flex flex-wrap gap-1 text-sm">
+  {visible.map((c) => {
+    const href = `/category/${c.slug}`;
+    const active = current.startsWith(href);
+    return (
+      <a
+        href={href}
+        class:list={[
+          "rounded-full px-3 py-1 no-underline transition-colors",
+          active
+            ? "bg-accent/10 dark:bg-accent-dark/15 text-accent dark:text-accent-dark"
+            : "text-muted dark:text-muted-dark hover:text-ink dark:hover:text-ink-dark hover:bg-surface dark:hover:bg-surface-dark",
+        ]}
+      >{c.labelGr}</a>
+    );
+  })}
+</nav>

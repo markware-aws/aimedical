@@ -1,0 +1,117 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+
+const lastUpdated = "7 Μαΐου 2026";
+---
+<BaseLayout
+  title="Πολιτική Cookies"
+  description="Τι είναι τα cookies, ποια χρησιμοποιούμε, ποια ενδέχεται να χρησιμοποιηθούν από διαφημιστές, και πώς μπορείτε να τα διαχειριστείτε."
+  canonicalPath="/cookie-policy"
+  containerClass="max-w-3xl"
+>
+  <article class="prose-article">
+    <h1 class="text-3xl font-semibold tracking-tight md:text-4xl">Πολιτική Cookies</h1>
+    <p class="text-sm text-muted dark:text-muted-dark">Τελευταία ενημέρωση: {lastUpdated}</p>
+
+    <h2>Τι είναι τα cookies</h2>
+    <p>
+      Τα cookies είναι μικρά αρχεία κειμένου που αποθηκεύονται από τον περιηγητή σας
+      στη συσκευή σας όταν επισκέπτεστε έναν ιστότοπο. Επιτρέπουν στον ιστότοπο
+      να «θυμάται» πληροφορίες σχετικά με την επίσκεψή σας
+      (π.χ. προτίμηση γλώσσας, κατάσταση σύνδεσης).
+    </p>
+    <p>
+      Παρόμοιες τεχνολογίες περιλαμβάνουν τοπική αποθήκευση (localStorage),
+      session storage, και pixels παρακολούθησης.
+    </p>
+
+    <h2>Κατηγορίες cookies που χρησιμοποιούμε</h2>
+
+    <h3>1. Απαραίτητα (πάντα ενεργά)</h3>
+    <p>
+      Δεν χρειάζονται συγκατάθεση. Είναι απαραίτητα για τη βασική λειτουργία.
+    </p>
+    <ul>
+      <li>
+        <strong>theme</strong> (localStorage) — αποθηκεύει την προτίμηση
+        φωτεινής/σκοτεινής λειτουργίας. Διάρκεια: μέχρι να τη διαγράψετε.
+      </li>
+      <li>
+        <strong>cookie-consent</strong> (localStorage) — αποθηκεύει την επιλογή σας
+        για το αν αποδέχεστε προαιρετικά cookies. Διάρκεια: μέχρι να τη διαγράψετε.
+      </li>
+    </ul>
+
+    <h3>2. Στατιστικά (προαιρετικά)</h3>
+    <p>
+      Ενδέχεται να χρησιμοποιήσουμε privacy-friendly υπηρεσία στατιστικών
+      (π.χ. Plausible Analytics) που δεν συλλέγει προσωπικά αναγνωρίσιμα στοιχεία.
+      Θα ενεργοποιηθούν μόνο εάν δώσετε τη συγκατάθεσή σας.
+    </p>
+
+    <h3>3. Διαφημιστικά τρίτων (προαιρετικά)</h3>
+    <p>
+      Ο ιστότοπος ενδέχεται να εμφανίσει διαφημίσεις μέσω <strong>Google AdSense</strong>.
+      Όταν αυτό ενεργοποιηθεί, η Google και οι συνεργάτες της θα τοποθετούν
+      cookies στη συσκευή σας — μόνο μετά τη ρητή συγκατάθεσή σας μέσω
+      κατάλληλης Πλατφόρμας Διαχείρισης Συγκαταθέσεων (CMP).
+    </p>
+    <p>Παραδείγματα τέτοιων cookies:</p>
+    <ul>
+      <li>
+        <strong>NID, IDE, ANID, DSID</strong> (Google) — εξατομίκευση και μέτρηση διαφημίσεων.
+      </li>
+      <li>
+        <strong>__gads, __gpi</strong> (Google AdSense) — προβολή διαφημίσεων και
+        περιορισμός εμφανίσεων (frequency capping).
+      </li>
+    </ul>
+    <p>
+      Πλήρης λίστα και περιγραφή στους όρους της Google:
+    </p>
+    <ul>
+      <li><a href="https://policies.google.com/technologies/cookies" rel="noopener" target="_blank">Πώς χρησιμοποιεί η Google τα cookies</a></li>
+      <li><a href="https://policies.google.com/technologies/ads" rel="noopener" target="_blank">Διαφημίσεις και περιεχόμενο τρίτων</a></li>
+      <li><a href="https://policies.google.com/technologies/partner-sites" rel="noopener" target="_blank">Δεδομένα που συλλέγει η Google στους ιστότοπους-συνεργάτες</a></li>
+    </ul>
+
+    <h2>Πώς να διαχειριστείτε τα cookies</h2>
+
+    <h3>Στον ιστότοπό μας</h3>
+    <p>
+      Όταν επισκέπτεστε τον ιστότοπο για πρώτη φορά, εμφανίζεται μήνυμα
+      αποδοχής/απόρριψης. Μπορείτε να ανακαλέσετε τη συγκατάθεσή σας
+      ανά πάσα στιγμή διαγράφοντας το αντικείμενο
+      <code>cookie-consent</code> από τον αποθηκευτικό χώρο του περιηγητή σας
+      (DevTools → Application → Local Storage).
+    </p>
+
+    <h3>Στον περιηγητή σας</h3>
+    <p>Όλοι οι σύγχρονοι περιηγητές επιτρέπουν τη διαχείριση cookies:</p>
+    <ul>
+      <li><a href="https://support.google.com/chrome/answer/95647" rel="noopener" target="_blank">Google Chrome</a></li>
+      <li><a href="https://support.mozilla.org/el/kb/enable-and-disable-cookies-website-preferences" rel="noopener" target="_blank">Mozilla Firefox</a></li>
+      <li><a href="https://support.apple.com/el-gr/guide/safari/sfri11471/mac" rel="noopener" target="_blank">Apple Safari</a></li>
+      <li><a href="https://support.microsoft.com/el-gr/microsoft-edge" rel="noopener" target="_blank">Microsoft Edge</a></li>
+    </ul>
+
+    <h3>Για διαφημίσεις</h3>
+    <ul>
+      <li><a href="https://adssettings.google.com/" rel="noopener" target="_blank">Ρυθμίσεις διαφημίσεων Google</a></li>
+      <li><a href="https://www.youronlinechoices.eu/" rel="noopener" target="_blank">Your Online Choices (ΕΕ)</a></li>
+      <li><a href="https://optout.aboutads.info/" rel="noopener" target="_blank">Digital Advertising Alliance opt-out</a></li>
+    </ul>
+
+    <h2>Συνέπειες απόρριψης cookies</h2>
+    <p>
+      Η απόρριψη όλων των μη-απαραίτητων cookies δεν επηρεάζει τη δυνατότητά σας
+      να διαβάσετε άρθρα στον ιστότοπο. Μπορεί να επηρεάσει τα στατιστικά
+      που λαμβάνουμε για τη χρήση και την εμφάνιση εξατομικευμένων διαφημίσεων.
+    </p>
+
+    <h2>Σχετικά</h2>
+    <p>
+      Διαβάστε επίσης τη <a href="/privacy">Πολιτική απορρήτου</a> και τους <a href="/terms">Όρους χρήσης</a>.
+    </p>
+  </article>
+</BaseLayout>

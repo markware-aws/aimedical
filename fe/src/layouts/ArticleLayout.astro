@@ -1,0 +1,88 @@
+---
+import BaseLayout from "./BaseLayout.astro";
+import Disclaimer from "../components/Disclaimer.astro";
+import SourceCitation from "../components/SourceCitation.astro";
+import RelatedArticles from "../components/RelatedArticles.astro";
+import CategoryBadge from "../components/CategoryBadge.astro";
+import ArticleSections from "../components/ArticleSections.astro";
+import type { Article } from "../lib/articles";
+
+interface Props {
+  article: Article;
+  related: Article[];
+}
+
+const { article, related } = Astro.props;
+const {
+  title,
+  subtitle,
+  description,
+  date,
+  category,
+  sourceUrl,
+  doi,
+  source,
+  heroImage,
+  keyFindings,
+  studyLimitations,
+  clinicalSignificance,
+} = article.data;
+const slug = article.slug;
+const dateStr = date.toLocaleDateString("el-GR", { year: "numeric", month: "long", day: "numeric" });
+---
+<BaseLayout
+  title={title}
+  description={description || subtitle || title}
+  canonicalPath={`/articles/${slug}`}
+  ogType="article"
+  publishedDate={date}
+  article={{ sourceUrl, doi }}
+  containerClass="max-w-3xl"
+>
+  <article>
+    <header class="mb-8">
+      <CategoryBadge category={category} size="md" />
+      <h1 class="mt-4 text-3xl font-semibold leading-tight tracking-tight md:text-[2.5rem] md:leading-[1.15]">
+        {title}
+      </h1>
+      {subtitle && (
+        <p class="mt-4 text-xl leading-relaxed text-muted dark:text-muted-dark md:text-2xl">{subtitle}</p>
+      )}
+      <div class="mt-5 flex flex-wrap items-center gap-3 text-sm text-muted dark:text-muted-dark">
+        <time datetime={date.toISOString()}>{dateStr}</time>
+        <span aria-hidden="true">·</span>
+        <span class="inline-flex items-center gap-1.5 rounded-full border border-border dark:border-border-dark px-2.5 py-0.5 text-xs">
+          <span class="inline-block h-1.5 w-1.5 rounded-full bg-med" aria-hidden="true" />
+          AI-generated · human-reviewed
+        </span>
+      </div>
+    </header>
+
+    {heroImage && (
+      <figure class="my-8 -mx-4 overflow-hidden rounded-lg md:mx-0">
+        <img
+          src={heroImage}
+          alt=""
+          class="aspect-[16/9] w-full object-cover"
+          loading="eager"
+          decoding="async"
+        />
+      </figure>
+    )}
+
+    <div class="prose-article">
+      <slot />
+    </div>
+
+    <ArticleSections
+      keyFindings={keyFindings}
+      studyLimitations={studyLimitations}
+      clinicalSignificance={clinicalSignificance}
+    />
+
+    <SourceCitation sourceUrl={sourceUrl} doi={doi} source={source} />
+    <Disclaimer />
+
+    <RelatedArticles articles={related} />
+  </article>
+</BaseLayout>

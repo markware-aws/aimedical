@@ -1,0 +1,28 @@
+---
+interface Props {
+  sourceUrl: string;
+  doi?: string;
+  source?: string;
+}
+const { sourceUrl, doi, source } = Astro.props;
+---
+<aside class="my-10 rounded-lg border border-border dark:border-border-dark bg-surface dark:bg-surface-dark p-5 text-sm">
+  <p class="mb-3 font-semibold uppercase tracking-wider text-ink dark:text-ink-dark text-xs">
+    Πρωτότυπη πηγή
+  </p>
+  <ul class="space-y-1.5 text-muted dark:text-muted-dark">
+    <li>
+      <span class="text-ink dark:text-ink-dark">Σύνδεσμος:</span>{" "}
+      <a href={sourceUrl} rel="noopener noreferrer" target="_blank" class="break-all">{sourceUrl}</a>
+    </li>
+    {doi && (
+      <li>
+        <span class="text-ink dark:text-ink-dark">DOI:</span>{" "}
+        <a href={`https://doi.org/${doi}`} rel="noopener noreferrer" target="_blank">{doi}</a>
+      </li>
+    )}
+    {source && (
+      <li><span class="text-ink dark:text-ink-dark">Βάση δεδομένων:</span> {source}</li>
+    )}
+  </ul>
+</aside>

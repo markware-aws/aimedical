@@ -1,0 +1,38 @@
+---
+import { SITE_NAME } from "../consts";
+import CategoryNav from "./CategoryNav.astro";
+import SearchOverlay from "./SearchOverlay.astro";
+import ThemeToggle from "./ThemeToggle.astro";
+---
+<header class="sticky top-0 z-40 border-b border-border dark:border-border-dark bg-bg/85 dark:bg-bg-dark/85 backdrop-blur supports-[backdrop-filter]:bg-bg/70 dark:supports-[backdrop-filter]:bg-bg-dark/70">
+  <div class="mx-auto flex max-w-6xl items-center justify-between gap-4 px-4 py-4">
+    <a href="/" class="group inline-flex items-center gap-2 text-ink dark:text-ink-dark no-underline hover:no-underline">
+      <span class="inline-flex h-8 w-8 items-center justify-center rounded-md bg-accent text-white">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" class="h-4 w-4" aria-hidden="true">
+          <path d="M12 3v18M3 12h18" />
+        </svg>
+      </span>
+      <span class="text-base font-semibold tracking-tight md:text-lg">{SITE_NAME}</span>
+    </a>
+
+    <div class="flex items-center gap-2">
+      <SearchOverlay />
+      <a
+        href="/rss.xml"
+        aria-label="RSS feed"
+        title="RSS feed"
+        class="inline-flex h-9 w-9 items-center justify-center rounded-md border border-border dark:border-border-dark text-ink dark:text-ink-dark no-underline hover:bg-surface dark:hover:bg-surface-dark transition-colors"
+      >
+        <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M4 11a9 9 0 0 1 9 9" />
+          <path d="M4 4a16 16 0 0 1 16 16" />
+          <circle cx="5" cy="19" r="1.5" fill="currentColor" stroke="none" />
+        </svg>
+      </a>
+      <ThemeToggle />
+    </div>
+  </div>
+  <div class="mx-auto max-w-6xl px-4 pb-3">
+    <CategoryNav />
+  </div>
+</header>

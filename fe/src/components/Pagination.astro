@@ -1,0 +1,27 @@
+---
+interface Props {
+  prev?: { url: string; label?: string };
+  next?: { url: string; label?: string };
+}
+const { prev, next } = Astro.props;
+---
+{(prev || next) && (
+  <nav aria-label="Σελιδοποίηση" class="mt-12 flex items-center justify-between border-t border-border dark:border-border-dark pt-6 text-sm">
+    <div>
+      {prev ? (
+        <a href={prev.url} class="inline-flex items-center gap-2 no-underline text-ink dark:text-ink-dark hover:text-accent dark:hover:text-accent-dark">
+          <span aria-hidden="true">←</span>
+          <span>{prev.label ?? "Προηγούμενα"}</span>
+        </a>
+      ) : <span />}
+    </div>
+    <div>
+      {next ? (
+        <a href={next.url} class="inline-flex items-center gap-2 no-underline text-ink dark:text-ink-dark hover:text-accent dark:hover:text-accent-dark">
+          <span>{next.label ?? "Επόμενα"}</span>
+          <span aria-hidden="true">→</span>
+        </a>
+      ) : <span />}
+    </div>
+  </nav>
+)}

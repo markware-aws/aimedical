@@ -1,0 +1,41 @@
+---
+interface Props {
+  keyFindings?: string[];
+  studyLimitations?: string;
+  clinicalSignificance?: string;
+}
+const { keyFindings = [], studyLimitations, clinicalSignificance } = Astro.props;
+---
+{keyFindings.length > 0 && (
+  <aside class="my-10 rounded-lg border-l-4 border-teal bg-surface dark:bg-surface-dark p-6">
+    <h2 class="!mt-0 mb-3 text-base font-semibold uppercase tracking-wider text-teal dark:text-teal-dark">
+      Βασικά ευρήματα
+    </h2>
+    <ul class="space-y-2 text-base leading-relaxed text-ink dark:text-ink-dark">
+      {keyFindings.map((f) => (
+        <li class="flex gap-3">
+          <span class="mt-2 inline-block h-1.5 w-1.5 shrink-0 rounded-full bg-teal" aria-hidden="true" />
+          <span>{f}</span>
+        </li>
+      ))}
+    </ul>
+  </aside>
+)}
+
+{studyLimitations && (
+  <aside class="my-10 rounded-lg border-l-4 border-muted bg-surface dark:bg-surface-dark p-6">
+    <h2 class="!mt-0 mb-3 text-base font-semibold uppercase tracking-wider text-muted dark:text-muted-dark">
+      Περιορισμοί της μελέτης
+    </h2>
+    <p class="text-base leading-relaxed text-ink dark:text-ink-dark">{studyLimitations}</p>
+  </aside>
+)}
+
+{clinicalSignificance && (
+  <aside class="my-10 rounded-lg border-l-4 border-med bg-surface dark:bg-surface-dark p-6">
+    <h2 class="!mt-0 mb-3 text-base font-semibold uppercase tracking-wider text-med dark:text-med-dark">
+      Κλινική σημασία
+    </h2>
+    <p class="text-base leading-relaxed text-ink dark:text-ink-dark">{clinicalSignificance}</p>
+  </aside>
+)}

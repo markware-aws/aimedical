@@ -1,0 +1,48 @@
+---
+import CategoryBadge from "./CategoryBadge.astro";
+import type { Article } from "../lib/articles";
+
+interface Props { article: Article }
+const { article } = Astro.props;
+const { title, subtitle, description, date, category, heroImage } = article.data;
+const slug = article.slug;
+const dateStr = date.toLocaleDateString("el-GR", { year: "numeric", month: "long", day: "numeric" });
+---
+<a href={`/articles/${slug}`} class="group block no-underline">
+  <article class="grid gap-6 overflow-hidden rounded-xl border border-border dark:border-border-dark bg-surface dark:bg-surface-dark md:grid-cols-2">
+    <div class="aspect-[16/10] overflow-hidden bg-bg dark:bg-bg-dark md:aspect-auto">
+      {heroImage ? (
+        <img
+          src={heroImage}
+          alt=""
+          loading="eager"
+          decoding="async"
+          class="h-full w-full object-cover transition-transform duration-500 group-hover:scale-[1.02]"
+        />
+      ) : (
+        <div class="flex h-full w-full items-center justify-center bg-gradient-to-br from-accent/10 to-teal/10 dark:from-accent-dark/15 dark:to-teal-dark/10">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2" class="h-16 w-16 text-accent/40 dark:text-accent-dark/40" aria-hidden="true">
+            <path d="M3 12h4l3-9 4 18 3-9h4" stroke-linecap="round" stroke-linejoin="round" />
+          </svg>
+        </div>
+      )}
+    </div>
+    <div class="flex flex-col justify-center p-6 md:p-8">
+      <div class="mb-3">
+        <CategoryBadge category={category} size="md" asLink={false} />
+      </div>
+      <h2 class="mb-3 text-2xl font-semibold leading-tight tracking-tight text-ink dark:text-ink-dark group-hover:text-accent dark:group-hover:text-accent-dark transition-colors md:text-3xl">
+        {title}
+      </h2>
+      {subtitle && (
+        <p class="mb-3 text-base leading-relaxed text-muted dark:text-muted-dark md:text-lg">{subtitle}</p>
+      )}
+      {!subtitle && description && (
+        <p class="mb-3 text-base leading-relaxed text-muted dark:text-muted-dark line-clamp-3">{description}</p>
+      )}
+      <div class="mt-2 text-xs uppercase tracking-wider text-muted dark:text-muted-dark">
+        <time datetime={date.toISOString()}>{dateStr}</time>
+      </div>
+    </div>
+  </article>
+</a>

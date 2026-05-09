@@ -1,0 +1,60 @@
+---
+---
+<div
+  id="cookie-consent"
+  role="dialog"
+  aria-labelledby="cookie-consent-title"
+  aria-describedby="cookie-consent-desc"
+  class="fixed inset-x-0 bottom-0 z-40 hidden p-4"
+>
+  <div class="mx-auto max-w-3xl rounded-xl border border-border dark:border-border-dark bg-bg dark:bg-bg-dark shadow-cardHover">
+    <div class="flex flex-col gap-4 p-5 md:flex-row md:items-start md:gap-6 md:p-6">
+      <div class="flex-1">
+        <p id="cookie-consent-title" class="font-sans text-sm font-semibold uppercase tracking-wider text-ink dark:text-ink-dark">
+          Cookies
+        </p>
+        <p id="cookie-consent-desc" class="mt-2 text-sm leading-relaxed text-muted dark:text-muted-dark">
+          Χρησιμοποιούμε απαραίτητα cookies για τη λειτουργία του ιστοτόπου.
+          Με την αποδοχή σας, ενδέχεται να χρησιμοποιήσουμε επίσης
+          προαιρετικά cookies για στατιστικά και διαφημίσεις τρίτων.
+          Μάθετε περισσότερα στην <a href="/cookie-policy">Πολιτική Cookies</a>.
+        </p>
+      </div>
+      <div class="flex flex-col gap-2 sm:flex-row md:shrink-0 md:flex-col lg:flex-row">
+        <button
+          type="button"
+          data-consent-action="reject"
+          class="rounded-md border border-border dark:border-border-dark bg-surface dark:bg-surface-dark px-4 py-2 text-sm font-medium text-ink dark:text-ink-dark transition-colors hover:bg-bg dark:hover:bg-bg-dark"
+        >Μόνο τα απαραίτητα</button>
+        <button
+          type="button"
+          data-consent-action="accept"
+          class="rounded-md bg-accent px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-accent/90"
+        >Αποδοχή όλων</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script is:inline>
+  (function () {
+    var KEY = "cookie-consent";
+    var banner = document.getElementById("cookie-consent");
+    if (!banner) return;
+    var stored;
+    try { stored = localStorage.getItem(KEY); } catch (e) {}
+    if (!stored) {
+      banner.classList.remove("hidden");
+      banner.classList.add("block");
+    }
+    banner.querySelectorAll("[data-consent-action]").forEach(function (btn) {
+      btn.addEventListener("click", function () {
+        var choice = btn.getAttribute("data-consent-action");
+        try { localStorage.setItem(KEY, choice); } catch (e) {}
+        banner.classList.add("hidden");
+        banner.classList.remove("block");
+        document.dispatchEvent(new CustomEvent("cookie-consent-change", { detail: { choice: choice } }));
+      });
+    });
+  })();
+</script>

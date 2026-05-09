@@ -1,0 +1,81 @@
+---
+---
+<button
+  type="button"
+  id="search-open"
+  aria-label="Αναζήτηση"
+  title="Αναζήτηση"
+  class="inline-flex h-9 w-9 items-center justify-center rounded-md border border-border dark:border-border-dark text-ink dark:text-ink-dark hover:bg-surface dark:hover:bg-surface-dark transition-colors"
+>
+  <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+    <circle cx="11" cy="11" r="7" />
+    <path d="m20 20-3.5-3.5" />
+  </svg>
+</button>
+
+<div
+  id="search-overlay"
+  role="dialog"
+  aria-modal="true"
+  aria-label="Αναζήτηση"
+  class="fixed inset-0 z-50 hidden items-start justify-center bg-ink/40 p-4 backdrop-blur-sm md:p-16"
+>
+  <div class="w-full max-w-2xl rounded-xl border border-border dark:border-border-dark bg-bg dark:bg-bg-dark shadow-cardHover">
+    <div class="flex items-center gap-3 border-b border-border dark:border-border-dark px-4 py-3">
+      <svg class="h-5 w-5 text-muted dark:text-muted-dark" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <circle cx="11" cy="11" r="7" />
+        <path d="m20 20-3.5-3.5" />
+      </svg>
+      <input
+        id="search-input"
+        type="search"
+        placeholder="Αναζήτηση άρθρων…"
+        class="w-full bg-transparent text-base text-ink dark:text-ink-dark placeholder:text-muted dark:placeholder:text-muted-dark focus:outline-none"
+        autocomplete="off"
+      />
+      <button
+        type="button"
+        id="search-close"
+        class="rounded-md border border-border dark:border-border-dark px-2 py-1 text-xs text-muted dark:text-muted-dark hover:text-ink dark:hover:text-ink-dark"
+        aria-label="Κλείσιμο"
+      >Esc</button>
+    </div>
+    <div class="px-4 py-6 text-sm text-muted dark:text-muted-dark">
+      <p>Η αναζήτηση είναι υπό κατασκευή.</p>
+      <p class="mt-2">Στο μεταξύ, εξερευνήστε τις <a href="/category/oncology">κατηγορίες</a> ή το <a href="/rss.xml">RSS</a>.</p>
+    </div>
+  </div>
+</div>
+
+<script is:inline>
+  (function () {
+    var openBtn = document.getElementById("search-open");
+    var overlay = document.getElementById("search-overlay");
+    var closeBtn = document.getElementById("search-close");
+    var input = document.getElementById("search-input");
+    if (!openBtn || !overlay || !closeBtn || !input) return;
+
+    function open() {
+      overlay.classList.remove("hidden");
+      overlay.classList.add("flex");
+      setTimeout(function () { input.focus(); }, 10);
+    }
+    function close() {
+      overlay.classList.add("hidden");
+      overlay.classList.remove("flex");
+    }
+
+    openBtn.addEventListener("click", open);
+    closeBtn.addEventListener("click", close);
+    overlay.addEventListener("click", function (e) {
+      if (e.target === overlay) close();
+    });
+    document.addEventListener("keydown", function (e) {
+      if (e.key === "Escape") close();
+      if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === "k") {
+        e.preventDefault();
+        open();
+      }
+    });
+  })();
+</script>

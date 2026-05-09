@@ -1,0 +1,39 @@
+---
+import CategoryBadge from "./CategoryBadge.astro";
+import type { Article } from "../lib/articles";
+
+interface Props { article: Article }
+const { article } = Astro.props;
+const { title, description, date, category, heroImage } = article.data;
+const slug = article.slug;
+const dateStr = date.toLocaleDateString("el-GR", { year: "numeric", month: "long", day: "numeric" });
+---
+<a href={`/articles/${slug}`} class="group block no-underline">
+  <article class="card card-hover h-full overflow-hidden">
+    {heroImage && (
+      <div class="aspect-[16/9] overflow-hidden bg-surface dark:bg-surface-dark">
+        <img
+          src={heroImage}
+          alt=""
+          loading="lazy"
+          decoding="async"
+          class="h-full w-full object-cover transition-transform duration-300 group-hover:scale-[1.02]"
+        />
+      </div>
+    )}
+    <div class="p-5">
+      <div class="mb-2">
+        <CategoryBadge category={category} asLink={false} />
+      </div>
+      <h3 class="mb-2 text-lg font-semibold leading-snug text-ink dark:text-ink-dark group-hover:text-accent dark:group-hover:text-accent-dark transition-colors">
+        {title}
+      </h3>
+      {description && (
+        <p class="mb-4 line-clamp-2 text-sm leading-relaxed text-muted dark:text-muted-dark">{description}</p>
+      )}
+      <div class="text-xs text-muted dark:text-muted-dark">
+        <time datetime={date.toISOString()}>{dateStr}</time>
+      </div>
+    </div>
+  </article>
+</a>

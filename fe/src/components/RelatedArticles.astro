@@ -1,0 +1,15 @@
+---
+import ArticleCard from "./ArticleCard.astro";
+import type { Article } from "../lib/articles";
+
+interface Props { articles: Article[]; heading?: string }
+const { articles, heading = "Σχετικά άρθρα" } = Astro.props;
+---
+{articles.length > 0 && (
+  <section class="mt-16 border-t border-border dark:border-border-dark pt-10">
+    <h2 class="mb-6 text-xl font-semibold tracking-tight text-ink dark:text-ink-dark">{heading}</h2>
+    <div class="grid gap-4 md:grid-cols-3">
+      {articles.map((a) => <ArticleCard article={a} />)}
+    </div>
+  </section>
+)}

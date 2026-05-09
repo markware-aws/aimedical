@@ -1,0 +1,42 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import ArticleCard from "../../components/ArticleCard.astro";
+import { CATEGORIES, categoryLabel } from "../../consts";
+import { getByCategory, type Article } from "../../lib/articles";
+
+export async function getStaticPaths() {
+  return Promise.all(
+    CATEGORIES.map(async (c) => ({
+      params: { category: c.slug },
+      props: { articles: await getByCategory(c.slug), category: c.slug },
+    })),
+  );
+}
+
+interface Props { articles: Article[]; category: string }
+const { articles, category } = Astro.props;
+const label = categoryLabel(category);
+---
+<BaseLayout
+  title={`${label} · Άρθρα`}
+  description={`Άρθρα για AI στην κατηγορία: ${label}`}
+  canonicalPath={`/category/${category}`}
+>
+  <section class="mb-8 border-b border-border dark:border-border-dark pb-6">
+    <p class="text-xs font-semibold uppercase tracking-[0.2em] text-accent dark:text-accent-dark">
+      Κατηγορία
+    </p>
+    <h1 class="mt-2 text-3xl font-semibold tracking-tight md:text-4xl">{label}</h1>
+    <p class="mt-2 text-sm text-muted dark:text-muted-dark">{articles.length} άρθρα</p>
+  </section>
+
+  {articles.length === 0 ? (
+    <p class="rounded-lg border border-border dark:border-border-dark bg-surface dark:bg-surface-dark p-8 text-center text-muted dark:text-muted-dark">
+      Δεν υπάρχουν άρθρα σε αυτή την κατηγορία ακόμη.
+    </p>
+  ) : (
+    <div class="grid gap-5 md:grid-cols-2 lg:grid-cols-3">
+      {articles.map((a) => <ArticleCard article={a} />)}
+    </div>
+  )}
+</BaseLayout>

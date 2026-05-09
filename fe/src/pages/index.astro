@@ -1,0 +1,73 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import ArticleCard from "../components/ArticleCard.astro";
+import FeaturedArticle from "../components/FeaturedArticle.astro";
+import NewsletterBox from "../components/NewsletterBox.astro";
+import { getFeatured, getPublishedArticles } from "../lib/articles";
+import { SITE_TAGLINE, CATEGORIES } from "../consts";
+
+const featured = await getFeatured();
+const allArticles = await getPublishedArticles();
+const latest = allArticles.filter((a) => a.slug !== featured?.slug).slice(0, 9);
+const categories = CATEGORIES.filter((c) => c.slug !== "other");
+---
+<BaseLayout title="AI Medical News Greece" description={SITE_TAGLINE} canonicalPath="/" isHome={true}>
+  <section class="mb-10">
+    <p class="mb-2 text-xs font-semibold uppercase tracking-[0.2em] text-accent dark:text-accent-dark">
+      Ελληνική έκδοση
+    </p>
+    <h1 class="max-w-3xl text-3xl font-semibold leading-tight tracking-tight md:text-4xl">
+      {SITE_TAGLINE}
+    </h1>
+    <p class="mt-3 max-w-2xl text-base leading-relaxed text-muted dark:text-muted-dark md:text-lg">
+      Καθημερινή ενημέρωση για επιστημονικές δημοσιεύσεις και εξελίξεις
+      στην εφαρμογή της τεχνητής νοημοσύνης στην ιατρική.
+    </p>
+  </section>
+
+  {featured && (
+    <section class="mb-14">
+      <FeaturedArticle article={featured} />
+    </section>
+  )}
+
+  {latest.length > 0 && (
+    <section class="mb-14">
+      <header class="mb-6 flex items-end justify-between gap-4">
+        <h2 class="text-xl font-semibold tracking-tight md:text-2xl">Πρόσφατα άρθρα</h2>
+        <a href="/rss.xml" class="text-sm text-muted dark:text-muted-dark no-underline hover:text-accent dark:hover:text-accent-dark">
+          RSS feed →
+        </a>
+      </header>
+      <div class="grid gap-5 md:grid-cols-2 lg:grid-cols-3">
+        {latest.map((a) => <ArticleCard article={a} />)}
+      </div>
+    </section>
+  )}
+
+  {!featured && latest.length === 0 && (
+    <p class="rounded-lg border border-border dark:border-border-dark bg-surface dark:bg-surface-dark p-8 text-center text-muted dark:text-muted-dark">
+      Δεν υπάρχουν ακόμη δημοσιευμένα άρθρα.
+    </p>
+  )}
+
+  <section class="mb-14">
+    <header class="mb-6">
+      <h2 class="text-xl font-semibold tracking-tight md:text-2xl">Θεματικές κατηγορίες</h2>
+      <p class="mt-1 text-sm text-muted dark:text-muted-dark">Εξερευνήστε τα άρθρα ανά τομέα.</p>
+    </header>
+    <div class="grid gap-3 sm:grid-cols-2 md:grid-cols-3">
+      {categories.map((c) => (
+        <a
+          href={`/category/${c.slug}`}
+          class="card card-hover flex items-center justify-between p-5 no-underline"
+        >
+          <span class="text-base font-medium text-ink dark:text-ink-dark">{c.labelGr}</span>
+          <span class="text-muted dark:text-muted-dark transition-transform group-hover:translate-x-0.5" aria-hidden="true">→</span>
+        </a>
+      ))}
+    </div>
+  </section>
+
+  <NewsletterBox />
+</BaseLayout>

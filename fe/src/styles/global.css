@@ -1,0 +1,83 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html {
+    @apply bg-bg text-ink antialiased;
+    font-family: theme("fontFamily.sans");
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+  }
+  html.dark {
+    @apply bg-bg-dark text-ink-dark;
+  }
+  body {
+    @apply bg-bg dark:bg-bg-dark text-ink dark:text-ink-dark;
+  }
+  h1, h2, h3, h4, h5, h6 {
+    @apply text-ink dark:text-ink-dark;
+    font-feature-settings: "ss01", "cv11";
+    letter-spacing: -0.01em;
+  }
+  a {
+    @apply text-accent dark:text-accent-dark underline-offset-4 hover:underline;
+    transition: color 200ms;
+  }
+  *:focus-visible {
+    @apply outline outline-2 outline-offset-2 outline-accent dark:outline-accent-dark rounded-sm;
+  }
+  hr {
+    @apply border-border dark:border-border-dark;
+  }
+  ::selection {
+    background: rgba(15, 76, 117, 0.18);
+  }
+}
+
+@layer components {
+  .prose-article {
+    @apply max-w-reading text-[1.0625rem] leading-[1.75] text-ink dark:text-ink-dark;
+  }
+  .prose-article p {
+    @apply my-5;
+  }
+  .prose-article h2 {
+    @apply mt-12 mb-4 text-2xl font-semibold tracking-tight;
+  }
+  .prose-article h3 {
+    @apply mt-8 mb-3 text-xl font-semibold tracking-tight;
+  }
+  .prose-article ul,
+  .prose-article ol {
+    @apply my-5 pl-6 space-y-2;
+  }
+  .prose-article ul { @apply list-disc; }
+  .prose-article ol { @apply list-decimal; }
+  .prose-article blockquote {
+    @apply my-6 border-l-2 border-accent dark:border-accent-dark pl-4 italic text-muted dark:text-muted-dark;
+  }
+  .prose-article code {
+    @apply rounded bg-surface dark:bg-surface-dark px-1.5 py-0.5 text-[0.9em];
+  }
+  .prose-article a {
+    @apply text-accent dark:text-accent-dark underline underline-offset-4;
+  }
+
+  .card {
+    @apply rounded-lg border border-border dark:border-border-dark bg-surface dark:bg-surface-dark shadow-card transition-shadow duration-200;
+  }
+  .card-hover {
+    @apply hover:shadow-cardHover hover:-translate-y-0.5 transition-all duration-200;
+  }
+}
+
+@layer utilities {
+  .ring-divider {
+    box-shadow: inset 0 -1px 0 0 theme("colors.border.DEFAULT");
+  }
+  .dark .ring-divider {
+    box-shadow: inset 0 -1px 0 0 theme("colors.border.dark");
+  }
+}

@@ -1,0 +1,82 @@
+---
+import { SITE_NAME, SITE_URL } from "../consts";
+
+interface Props {
+  title: string;
+  description?: string;
+  canonicalPath?: string;
+  ogType?: "website" | "article";
+  publishedDate?: Date;
+  article?: {
+    sourceUrl: string;
+    doi?: string;
+    authors?: string[];
+  };
+  isHome?: boolean;
+}
+
+const {
+  title,
+  description = "Ενημέρωση για την τεχνητή νοημοσύνη στην ιατρική, στα Ελληνικά.",
+  canonicalPath,
+  ogType = "website",
+  publishedDate,
+  article,
+  isHome = false,
+} = Astro.props;
+
+const canonical = new URL(canonicalPath ?? Astro.url.pathname, SITE_URL).toString();
+const fullTitle = title === SITE_NAME ? title : `${title} · ${SITE_NAME}`;
+
+const articleJsonLd = ogType === "article" && article && publishedDate
+  ? {
+      "@context": "https://schema.org",
+      "@type": "MedicalScholarlyArticle",
+      headline: title,
+      description,
+      datePublished: publishedDate.toISOString(),
+      url: canonical,
+      author: (article.authors ?? []).map((name) => ({ "@type": "Person", name })),
+      citation: [article.sourceUrl, article.doi ? `https://doi.org/${article.doi}` : null].filter(Boolean),
+      publisher: { "@type": "Organization", name: SITE_NAME, url: SITE_URL },
+      inLanguage: "el",
+    }
+  : null;
+
+const orgJsonLd = isHome
+  ? {
+      "@context": "https://schema.org",
+      "@type": "Organization",
+      name: SITE_NAME,
+      url: SITE_URL,
+      description: "Ελληνική κάλυψη της τεχνητής νοημοσύνης στην ιατρική.",
+      sameAs: [],
+    }
+  : null;
+
+const websiteJsonLd = isHome
+  ? {
+      "@context": "https://schema.org",
+      "@type": "WebSite",
+      name: SITE_NAME,
+      url: SITE_URL,
+      inLanguage: "el-GR",
+    }
+  : null;
+---
+<title>{fullTitle}</title>
+<meta name="description" content={description} />
+<link rel="canonical" href={canonical} />
+<meta property="og:title" content={title} />
+<meta property="og:description" content={description} />
+<meta property="og:type" content={ogType} />
+<meta property="og:url" content={canonical} />
+<meta property="og:site_name" content={SITE_NAME} />
+<meta property="og:locale" content="el_GR" />
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content={title} />
+<meta name="twitter:description" content={description} />
+<link rel="alternate" type="application/rss+xml" title={`${SITE_NAME} RSS`} href={new URL("/rss.xml", SITE_URL).toString()} />
+{articleJsonLd && <script type="application/ld+json" set:html={JSON.stringify(articleJsonLd)} />}
+{orgJsonLd && <script type="application/ld+json" set:html={JSON.stringify(orgJsonLd)} />}
+{websiteJsonLd && <script type="application/ld+json" set:html={JSON.stringify(websiteJsonLd)} />}
