@@ -15,7 +15,6 @@ permissions:
 env:
   AWS_REGION: eu-central-1
   S3_BUCKET: aimedical-frontend
-  AWS_ROLE_ARN: arn:aws:iam::000000000000:role/github-actions-deployer
 
 jobs:
   build-and-deploy:
@@ -28,7 +27,7 @@ jobs:
 
       - uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: 24
           cache: npm
           cache-dependency-path: fe/package-lock.json
 
@@ -40,7 +39,7 @@ jobs:
 
       - uses: aws-actions/configure-aws-credentials@v4
         with:
-          role-to-assume: ${{ env.AWS_ROLE_ARN }}
+          role-to-assume: ${{ secrets.AWS_ROLE_ARN }}
           aws-region: ${{ env.AWS_REGION }}
 
       - name: Sync immutable assets
