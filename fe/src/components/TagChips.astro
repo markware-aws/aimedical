@@ -1,0 +1,26 @@
+---
+import { tagSlug } from "../lib/articles";
+
+interface Props {
+  tags: string[];
+  label?: string;
+}
+
+const { tags, label = "Tags:" } = Astro.props;
+const normalized = tags
+  .map((tag) => ({ tag, slug: tagSlug(tag) }))
+  .filter((item) => item.slug);
+---
+{normalized.length > 0 && (
+  <div class="flex flex-wrap items-center gap-2 text-sm">
+    <span class="text-muted dark:text-muted-dark">{label}</span>
+    {normalized.map(({ tag, slug }) => (
+      <a
+        href={`/tag/${slug}`}
+        class="rounded-full border border-border dark:border-border-dark bg-bg dark:bg-bg-dark px-3 py-1 text-xs font-medium text-muted dark:text-muted-dark no-underline transition-colors hover:border-accent/40 hover:text-accent dark:hover:border-accent-dark/40 dark:hover:text-accent-dark"
+      >
+        #{tag}
+      </a>
+    ))}
+  </div>
+)}

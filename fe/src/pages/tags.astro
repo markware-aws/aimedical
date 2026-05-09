@@ -1,0 +1,41 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import { getTags } from "../lib/articles";
+
+const tags = await getTags();
+---
+<BaseLayout
+  title="Tags"
+  description="Browse AI medical news articles by topic tags."
+  canonicalPath="/tags"
+>
+  <section class="mb-8 border-b border-border dark:border-border-dark pb-6">
+    <p class="text-xs font-semibold uppercase tracking-[0.2em] text-accent dark:text-accent-dark">
+      Tags
+    </p>
+    <h1 class="mt-2 text-3xl font-semibold tracking-tight md:text-4xl">Browse by tag</h1>
+    <p class="mt-2 max-w-2xl text-sm leading-relaxed text-muted dark:text-muted-dark">
+      Explore articles using the English topic tags generated from each study.
+    </p>
+  </section>
+
+  {tags.length === 0 ? (
+    <p class="rounded-lg border border-border dark:border-border-dark bg-surface dark:bg-surface-dark p-8 text-center text-muted dark:text-muted-dark">
+      No tags are available yet.
+    </p>
+  ) : (
+    <div class="flex flex-wrap gap-3">
+      {tags.map(({ tag, slug, count }) => (
+        <a
+          href={`/tag/${slug}`}
+          class="group rounded-full border border-border dark:border-border-dark bg-surface dark:bg-surface-dark px-4 py-2 text-sm font-medium text-ink dark:text-ink-dark no-underline transition-colors hover:border-accent/40 hover:text-accent dark:hover:border-accent-dark/40 dark:hover:text-accent-dark"
+        >
+          #{tag}
+          <span class="ml-2 text-xs text-muted dark:text-muted-dark group-hover:text-accent dark:group-hover:text-accent-dark">
+            {count}
+          </span>
+        </a>
+      ))}
+    </div>
+  )}
+</BaseLayout>

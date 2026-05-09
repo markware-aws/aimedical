@@ -5,6 +5,7 @@ import SourceCitation from "../components/SourceCitation.astro";
 import RelatedArticles from "../components/RelatedArticles.astro";
 import CategoryBadge from "../components/CategoryBadge.astro";
 import ArticleSections from "../components/ArticleSections.astro";
+import TagChips from "../components/TagChips.astro";
 import type { Article } from "../lib/articles";
 
 interface Props {
@@ -15,14 +16,17 @@ interface Props {
 const { article, related } = Astro.props;
 const {
   title,
+  originalTitle,
   subtitle,
   description,
   date,
   category,
+  tags,
   sourceUrl,
   doi,
   source,
   heroImage,
+  conditions,
   keyFindings,
   studyLimitations,
   clinicalSignificance,
@@ -47,6 +51,26 @@ const dateStr = date.toLocaleDateString("el-GR", { year: "numeric", month: "long
       </h1>
       {subtitle && (
         <p class="mt-4 text-xl leading-relaxed text-muted dark:text-muted-dark md:text-2xl">{subtitle}</p>
+      )}
+      {originalTitle && (
+        <p class="mt-3 rounded-lg border border-border dark:border-border-dark bg-surface dark:bg-surface-dark px-4 py-3 text-sm leading-relaxed text-muted dark:text-muted-dark">
+          <span class="font-medium text-ink dark:text-ink-dark">Original title:</span> {originalTitle}
+        </p>
+      )}
+      {conditions && conditions.length > 0 && (
+        <div class="mt-4 flex flex-wrap items-center gap-2 text-sm">
+          <span class="text-muted dark:text-muted-dark">Αφορά:</span>
+          {conditions.map((condition) => (
+            <span class="rounded-full border border-border dark:border-border-dark bg-surface dark:bg-surface-dark px-3 py-1 text-xs font-medium text-ink dark:text-ink-dark">
+              {condition}
+            </span>
+          ))}
+        </div>
+      )}
+      {tags.length > 0 && (
+        <div class="mt-4">
+          <TagChips tags={tags} />
+        </div>
       )}
       <div class="mt-5 flex flex-wrap items-center gap-3 text-sm text-muted dark:text-muted-dark">
         <time datetime={date.toISOString()}>{dateStr}</time>
@@ -83,6 +107,6 @@ const dateStr = date.toLocaleDateString("el-GR", { year: "numeric", month: "long
     <SourceCitation sourceUrl={sourceUrl} doi={doi} source={source} />
     <Disclaimer />
 
-    <RelatedArticles articles={related} />
+    <RelatedArticles articles={related} category={category} />
   </article>
 </BaseLayout>

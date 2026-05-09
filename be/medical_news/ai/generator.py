@@ -29,6 +29,9 @@ def generate_greek(article: RawArticle) -> GreekArticle:
         "description_gr": str(parsed.get("descriptionGr") or ""),
         "body": str(body),
         "tags": [str(tag) for tag in parsed.get("tags", [])] if isinstance(parsed.get("tags"), list) else [],
+        "conditions": [str(item) for item in parsed.get("conditions", [])]
+        if isinstance(parsed.get("conditions"), list)
+        else [],
         "key_findings": [str(item) for item in parsed.get("keyFindings", [])]
         if isinstance(parsed.get("keyFindings"), list)
         else [],

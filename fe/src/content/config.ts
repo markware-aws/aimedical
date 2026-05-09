@@ -4,6 +4,7 @@ const articles = defineCollection({
   type: "content",
   schema: z.object({
     title: z.string(),
+    originalTitle: z.string().optional(),
     subtitle: z.string().optional(),
     date: z.coerce.date(),
     description: z.string().default(""),
@@ -21,6 +22,7 @@ const articles = defineCollection({
     sourceUrl: z.string().url(),
     doi: z.string().optional(),
     source: z.enum(["pubmed", "arxiv", "rss"]).optional(),
+    conditions: z.array(z.string()).optional(),
     keyFindings: z.array(z.string()).optional(),
     studyLimitations: z.string().optional(),
     clinicalSignificance: z.string().optional(),

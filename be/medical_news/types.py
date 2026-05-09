@@ -39,6 +39,7 @@ class GreekArticle(TypedDict):
     description_gr: str
     body: str
     tags: list[str]
+    conditions: list[str]
     key_findings: list[str]
     limitations: str
     clinical_significance: str

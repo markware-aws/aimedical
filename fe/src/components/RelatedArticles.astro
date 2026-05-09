@@ -1,14 +1,39 @@
 ---
 import ArticleCard from "./ArticleCard.astro";
 import type { Article } from "../lib/articles";
+import { categoryLabel } from "../consts";
 
-interface Props { articles: Article[]; heading?: string }
-const { articles, heading = "Σχετικά άρθρα" } = Astro.props;
+interface Props {
+  articles: Article[];
+  category?: string;
+  heading?: string;
+}
+
+const { articles, category, heading } = Astro.props;
+const label = category ? categoryLabel(category) : undefined;
+const title = heading ?? (label ? `Περισσότερα στην κατηγορία ${label}` : "Σχετικά άρθρα");
 ---
 {articles.length > 0 && (
-  <section class="mt-16 border-t border-border dark:border-border-dark pt-10">
-    <h2 class="mb-6 text-xl font-semibold tracking-tight text-ink dark:text-ink-dark">{heading}</h2>
-    <div class="grid gap-4 md:grid-cols-3">
+  <section class="mt-16 border-t border-border dark:border-border-dark pt-10" aria-labelledby="related-articles-heading">
+    <div class="mb-6 flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
+      <div>
+        <p class="mb-2 text-xs font-semibold uppercase tracking-[0.2em] text-accent dark:text-accent-dark">
+          Συνέχεια ανάγνωσης
+        </p>
+        <h2 id="related-articles-heading" class="text-2xl font-semibold tracking-tight text-ink dark:text-ink-dark">
+          {title}
+        </h2>
+        <p class="mt-2 max-w-xl text-sm leading-relaxed text-muted dark:text-muted-dark">
+          Άρθρα από την ίδια θεματική ενότητα, ώστε να δείτε το εύρημα μέσα σε ευρύτερο κλινικό πλαίσιο.
+        </p>
+      </div>
+      {category && (
+        <a href={`/category/${category}`} class="text-sm font-medium no-underline text-accent dark:text-accent-dark hover:underline">
+          Όλα τα άρθρα →
+        </a>
+      )}
+    </div>
+    <div class="grid gap-5 sm:grid-cols-2">
       {articles.map((a) => <ArticleCard article={a} />)}
     </div>
   </section>

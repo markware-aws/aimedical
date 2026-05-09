@@ -23,6 +23,7 @@ def build_mdx(raw: RawArticle, greek: GreekArticle, category: ArticleCategory) -
     lines = [
         "---",
         f"title: {_yaml_string(greek['title_gr'])}",
+        f"originalTitle: {_yaml_string(raw['title'])}",
     ]
     if greek["subtitle_gr"]:
         lines.append(f"subtitle: {_yaml_string(greek['subtitle_gr'])}")
@@ -38,6 +39,9 @@ def build_mdx(raw: RawArticle, greek: GreekArticle, category: ArticleCategory) -
     if greek["key_findings"]:
         lines.append("keyFindings:")
         lines.extend(f"  - {_yaml_string(finding)}" for finding in greek["key_findings"])
+    if greek["conditions"]:
+        lines.append("conditions:")
+        lines.extend(f"  - {_yaml_string(condition)}" for condition in greek["conditions"])
     if greek["limitations"]:
         lines.append(f"studyLimitations: {_yaml_string(greek['limitations'])}")
     if greek["clinical_significance"]:
