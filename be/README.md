@@ -35,12 +35,21 @@ python scripts/invoke_local.py
 | Script                                      | Description                                                                 |
 | ------------------------------------------- | --------------------------------------------------------------------------- |
 | `python scripts/invoke_local.py`            | Runs the orchestrator locally end-to-end                                    |
+| `python scripts/invoke_topic.py --query "2025 AI breakthroughs in medicine" --year 2025 --max-articles 3` | Runs a one-off sourced topic query through the same pipeline |
 | `python -m compileall medical_news scripts` | Syntax/import-path smoke check                                              |
 | `bash scripts/package.sh`                   | compile check + dependency install into `dist/` + `function.zip`            |
 | `bash scripts/deploy.sh`                    | package + Lambda upload                                                     |
 | `bash scripts/provision.sh`                 | one-shot AWS CLI provisioning (S3, DynamoDB, IAM, Lambda, EventBridge cron) |
 
 `deploy.sh` and `provision.sh` use `AWS_PROFILE=aimedical-user` by default; override via env.
+
+Topic runs hit real PubMed/arXiv, OpenAI, GitHub, and DynamoDB. They create draft PRs just like the scheduled Lambda:
+
+```powershell
+python scripts/invoke_topic.py --query "2025 AI breakthroughs in medicine" --year 2025 --max-per-source 10 --max-articles 3
+```
+
+Use `--source pubmed` or `--source arxiv` to limit the query while testing.
 
 ---
 

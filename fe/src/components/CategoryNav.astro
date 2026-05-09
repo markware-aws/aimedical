@@ -1,7 +1,8 @@
 ---
-import { CATEGORIES } from "../consts";
-const visible = CATEGORIES.filter((c) => c.slug !== "other");
+import { CATEGORIES, PRIMARY_NAV_CATEGORIES } from "../consts";
+const visible = CATEGORIES.filter((c) => PRIMARY_NAV_CATEGORIES.includes(c.slug as (typeof PRIMARY_NAV_CATEGORIES)[number]));
 const current = Astro.url.pathname;
+const categoriesActive = current.startsWith("/categories");
 ---
 <nav aria-label="Κατηγορίες" class="-mx-2 flex flex-wrap gap-1 text-sm">
   {visible.map((c) => {
@@ -19,4 +20,13 @@ const current = Astro.url.pathname;
       >{c.labelGr}</a>
     );
   })}
+  <a
+    href="/categories"
+    class:list={[
+      "rounded-full px-3 py-1 no-underline transition-colors",
+      categoriesActive
+        ? "bg-accent/10 dark:bg-accent-dark/15 text-accent dark:text-accent-dark"
+        : "text-muted dark:text-muted-dark hover:text-ink dark:hover:text-ink-dark hover:bg-surface dark:hover:bg-surface-dark",
+    ]}
+  >Όλες οι κατηγορίες</a>
 </nav>

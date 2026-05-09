@@ -17,6 +17,10 @@ from medical_news.util.hash import content_hash
 
 
 def handler(event: dict[str, Any] | None, context: Any) -> RunSummary:
+    return process_articles(fetch_all())
+
+
+def process_articles(articles: list[RawArticle]) -> RunSummary:
     min_score = float(os.environ.get("RELEVANCE_MIN_SCORE", "7"))
     max_articles = int(os.environ.get("MAX_ARTICLES_PER_RUN", "10"))
 
@@ -29,7 +33,6 @@ def handler(event: dict[str, Any] | None, context: Any) -> RunSummary:
         "errors": [],
     }
 
-    articles = fetch_all()
     summary["fetched"] = len(articles)
     processed_this_run = 0
 

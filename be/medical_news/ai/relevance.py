@@ -9,11 +9,18 @@ from medical_news.types import RawArticle, RelevanceResult
 
 VALID_CATEGORIES: set[str] = {
     "oncology",
+    "cardiology",
+    "neurology",
+    "hepatology",
+    "immunology",
     "diagnostics",
     "radiology",
     "llms",
     "drug-discovery",
     "robotics",
+    "digital-health",
+    "public-health",
+    "women-health",
     "other",
 }
 

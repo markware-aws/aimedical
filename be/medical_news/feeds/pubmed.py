@@ -34,10 +34,20 @@ def fetch_pubmed(max_per_query: int = 5) -> list[RawArticle]:
     return _dedupe_by_source_id(all_articles)
 
 
-def _search_ids(query: str, n: int) -> list[str]:
+def fetch_pubmed_query(query: str, *, max_results: int = 10, year: int | None = None) -> list[RawArticle]:
+    ids = _search_ids(query, max_results, year=year)
+    if not ids:
+        return []
+    return _dedupe_by_source_id(_fetch_articles(ids))
+
+
+def _search_ids(query: str, n: int, *, year: int | None = None) -> list[str]:
+    params = {"db": "pubmed", "retmode": "json", "retmax": n, "sort": "date", "term": query}
+    if year is not None:
+        params.update({"mindate": f"{year}/01/01", "maxdate": f"{year}/12/31", "datetype": "pdat"})
     payload = get_json(
         ESEARCH,
-        params={"db": "pubmed", "retmode": "json", "retmax": n, "sort": "date", "term": query},
+        params=params,
         timeout=30,
     )
     return payload.get("esearchresult", {}).get("idlist", [])

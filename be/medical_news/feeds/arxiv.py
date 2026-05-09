@@ -16,20 +16,31 @@ def fetch_arxiv(max_per_category: int = 5) -> list[RawArticle]:
     for category in CATEGORIES:
         try:
             query = f"cat:{category} AND (abs:medical OR abs:health OR abs:clinical)"
-            xml = get_text(
-                ARXIV_API,
-                params={
-                    "search_query": query,
-                    "sortBy": "submittedDate",
-                    "sortOrder": "descending",
-                    "max_results": max_per_category,
-                },
-                timeout=30,
-            )
-            out.extend(_parse_arxiv(xml))
+            out.extend(_fetch_arxiv_query(query, max_per_category))
         except Exception as exc:
             logger.warn("arxiv query failed", {"cat": category, "err": str(exc)})
     return out
+
+
+def fetch_arxiv_query(query: str, *, max_results: int = 10, year: int | None = None) -> list[RawArticle]:
+    dated_query = query
+    if year is not None:
+        dated_query = f"({query}) AND submittedDate:[{year}01010000 TO {year}12312359]"
+    return _fetch_arxiv_query(dated_query, max_results)
+
+
+def _fetch_arxiv_query(query: str, max_results: int) -> list[RawArticle]:
+    xml = get_text(
+        ARXIV_API,
+        params={
+            "search_query": query,
+            "sortBy": "submittedDate",
+            "sortOrder": "descending",
+            "max_results": max_results,
+        },
+        timeout=30,
+    )
+    return _parse_arxiv(xml)
 
 
 def _parse_arxiv(xml: str) -> list[RawArticle]:

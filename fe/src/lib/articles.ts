@@ -17,6 +17,15 @@ export async function getByCategory(category: string): Promise<Article[]> {
   return all.filter((a) => a.data.category === category);
 }
 
+export async function getCategoryCounts(): Promise<Map<string, number>> {
+  const all = await getPublishedArticles();
+  const counts = new Map<string, number>();
+  for (const article of all) {
+    counts.set(article.data.category, (counts.get(article.data.category) ?? 0) + 1);
+  }
+  return counts;
+}
+
 export function tagSlug(tag: string): string {
   return tag
     .trim()

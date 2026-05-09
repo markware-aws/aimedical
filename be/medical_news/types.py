@@ -6,11 +6,18 @@ from typing import Literal, NotRequired, TypedDict
 FeedSource = Literal["pubmed", "arxiv", "rss"]
 ArticleCategory = Literal[
     "oncology",
+    "cardiology",
+    "neurology",
+    "hepatology",
+    "immunology",
     "diagnostics",
     "radiology",
     "llms",
     "drug-discovery",
     "robotics",
+    "digital-health",
+    "public-health",
+    "women-health",
     "other",
 ]
 

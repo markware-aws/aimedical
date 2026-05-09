@@ -11,7 +11,21 @@ Score on five dimensions, then return a single overall score 0-10:
 - Novelty (does it represent a new finding, capability, or application?)
 - Readability (is the content concrete enough to summarize accurately?)
 
-Categorize into one of: oncology, diagnostics, radiology, llms, drug-discovery, robotics, other.
+Categorize into exactly one of:
+- oncology: cancer diagnosis, treatment, prognosis, tumor biology
+- cardiology: heart disease, vascular risk, cardiovascular prediction
+- neurology: brain, epilepsy, dementia, stroke, neurodegenerative disease
+- hepatology: liver disease, MASLD, liver lesions, liver biopsy
+- immunology: immune response, inflammation, autoimmune disease, vaccines, transplant, immunosuppression
+- diagnostics: general diagnostic tools, screening, risk models not better covered elsewhere
+- radiology: imaging protocols, CT, MRI, ultrasound, interventional imaging
+- llms: large language models, clinical reasoning systems, generative AI
+- drug-discovery: drug development, target discovery, pharmacology
+- robotics: surgical robotics, rehabilitation robotics, automation hardware
+- digital-health: clinical platforms, apps, remote monitoring, workflow software
+- public-health: population health, hospital operations, health policy, epidemiology
+- women-health: pregnancy, fetal medicine, reproductive health, sex-specific medicine
+- other: use only when none of the above fits
 
 Return JSON only:
 {"relevant": boolean, "score": number, "category": string, "reason": string}
