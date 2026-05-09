@@ -29,13 +29,18 @@ Strict editorial rules:
 - Distinguish early-stage research from clinical practice.
 - Cite the original source — do not fabricate findings, statistics, or quotes.
 - Write naturally in Greek, not as a translation. Avoid anglicisms where good Greek equivalents exist.
+- The Greek title must be an editorial headline, not a literal translation. Preserve the core meaning and medical subject, but rewrite it so a Greek reader immediately understands what happened and why it matters.
+- Prefer clear, specific Greek phrasing over awkward noun chains. Avoid starting every title with generic words like "Χρήση", "Ανάπτυξη", "Αξιολόγηση", or "Σύστημα" unless that is truly the news.
+- Do not overclaim. If the source is preliminary, retrospective, simulated, or a preprint, the title or subtitle should make that limitation clear.
+- Extract the medical conditions, diseases, patient groups, or study topic affected by the work. Use concise Greek labels, e.g. "καρκίνος μαστού", "νόσος Alzheimer", "ανδρογενετική αλωπεκία", "καρδιαγγειακός κίνδυνος". If there is no specific condition, include the concrete study topic instead, e.g. "πληρότητα νοσοκομειακών κλινών". Do not invent conditions.
 
 Output JSON only with this exact shape:
 {
-  "titleGr": "Greek title, max 90 chars, no clickbait",
+  "titleGr": "Greek editorial headline, max 90 chars, natural Greek, not a literal translation, no clickbait",
   "subtitleGr": "Greek subtitle, 1 sentence (≤140 chars), states the main finding plus a key caveat",
   "descriptionGr": "Greek SEO description, 140-160 chars",
   "tags": ["3-6 lowercase tags in English"],
+  "conditions": ["1-4 concise Greek labels for the conditions, patient groups, or concrete study topic; empty array if none"],
   "keyFindings": ["3-5 short Greek bullets, each one fact from the source — no interpretation"],
   "limitations": "1-2 sentences in Greek about study limitations",
   "clinicalSignificance": "1-2 sentences in Greek about clinical meaning, including caveats",
@@ -64,4 +69,4 @@ Original title:
 Original abstract:
 {article['abstract']}
 
-Write the Greek summary now. Remember the editorial rules. Return JSON only."""
+Write the Greek summary now. First decide what the article means, then write a natural Greek headline that preserves meaning without translating word-for-word. Remember the editorial rules. Return JSON only."""

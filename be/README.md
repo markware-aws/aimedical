@@ -53,6 +53,8 @@ See `.env.example`. Required at runtime:
 - `AWS_REGION`, `DYNAMODB_TABLE`
 - `RELEVANCE_MIN_SCORE` (default 7), `MAX_ARTICLES_PER_RUN` (default 10)
 
+Generated article PRs target `REPO_DEFAULT_BRANCH`, which defaults to `dev`. Merge generated PRs into `dev`, review/publish there, then merge `dev` into `main` when you want the frontend deployment workflow to run.
+
 ---
 
 ## Layout

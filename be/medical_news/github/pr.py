@@ -81,7 +81,7 @@ def _headers() -> dict[str, str]:
 
 
 def _base_branch() -> str:
-    return os.environ.get("REPO_DEFAULT_BRANCH", "main")
+    return os.environ.get("REPO_DEFAULT_BRANCH", "dev")
 
 
 def _required(name: str) -> str:
