@@ -1,0 +1,99 @@
+---
+import { categoryLabel } from "../consts";
+
+interface Props {
+  category: string;
+  class?: string;
+}
+
+const { category, class: className = "" } = Astro.props;
+const label = categoryLabel(category);
+const motif = {
+  oncology: "cells",
+  cardiology: "pulse",
+  neurology: "network",
+  hepatology: "organ",
+  immunology: "cells",
+  diagnostics: "scan",
+  radiology: "scan",
+  llms: "network",
+  "drug-discovery": "molecule",
+  robotics: "grid",
+  "digital-health": "grid",
+  "public-health": "population",
+  "women-health": "pulse",
+  other: "pulse",
+}[category] ?? "pulse";
+---
+<div class={`relative flex h-full min-h-44 w-full overflow-hidden bg-surface dark:bg-surface-dark ${className}`} aria-hidden="true">
+  <div class="absolute inset-0 bg-[radial-gradient(circle_at_20%_20%,rgba(15,76,117,0.16),transparent_34%),radial-gradient(circle_at_80%_70%,rgba(42,127,126,0.14),transparent_32%)] dark:bg-[radial-gradient(circle_at_20%_20%,rgba(91,163,208,0.18),transparent_34%),radial-gradient(circle_at_80%_70%,rgba(93,181,179,0.16),transparent_32%)]" />
+  <svg viewBox="0 0 480 300" fill="none" class="relative h-full w-full text-accent dark:text-accent-dark">
+    {motif === "pulse" && (
+      <>
+        <path d="M42 168h84l34-86 58 152 42-100 33 34h145" stroke="currentColor" stroke-width="10" stroke-linecap="round" stroke-linejoin="round" opacity="0.62" />
+        <circle cx="375" cy="168" r="44" stroke="currentColor" stroke-width="8" opacity="0.22" />
+      </>
+    )}
+    {motif === "network" && (
+      <>
+        <path d="M132 82l94 52 92-46M226 134l-34 92M226 134l88 82M132 82l60 144M318 88l-4 128" stroke="currentColor" stroke-width="7" stroke-linecap="round" opacity="0.4" />
+        {[132, 226, 318, 192, 314].map((x, i) => (
+          <circle cx={x} cy={[82, 134, 88, 226, 216][i]} r={i === 1 ? 28 : 22} fill="currentColor" opacity={i === 1 ? "0.28" : "0.2"} />
+        ))}
+      </>
+    )}
+    {motif === "cells" && (
+      <>
+        <circle cx="148" cy="132" r="54" fill="currentColor" opacity="0.18" />
+        <circle cx="262" cy="96" r="38" fill="currentColor" opacity="0.24" />
+        <circle cx="316" cy="194" r="66" fill="currentColor" opacity="0.16" />
+        <path d="M123 132h50M148 107v50M246 96h32M262 80v32M287 194h58M316 165v58" stroke="currentColor" stroke-width="7" stroke-linecap="round" opacity="0.42" />
+      </>
+    )}
+    {motif === "scan" && (
+      <>
+        <rect x="112" y="58" width="256" height="184" rx="18" stroke="currentColor" stroke-width="8" opacity="0.42" />
+        <path d="M144 114h192M144 150h192M144 186h122" stroke="currentColor" stroke-width="8" stroke-linecap="round" opacity="0.34" />
+        <path d="M348 58v184M112 90h256" stroke="currentColor" stroke-width="4" opacity="0.18" />
+      </>
+    )}
+    {motif === "organ" && (
+      <>
+        <path d="M132 172c4-80 62-120 126-96 62 24 104 14 126 72 28 74-44 116-126 102-72-12-130 10-126-78Z" fill="currentColor" opacity="0.18" />
+        <path d="M184 154c46-24 86-23 142 6M198 202c38 12 76 14 124-2" stroke="currentColor" stroke-width="8" stroke-linecap="round" opacity="0.42" />
+      </>
+    )}
+    {motif === "molecule" && (
+      <>
+        <path d="M156 106l82 48 82-48M238 154v88M156 106v94M320 106v94" stroke="currentColor" stroke-width="7" stroke-linecap="round" opacity="0.4" />
+        {[156, 238, 320, 156, 238, 320].map((x, i) => (
+          <circle cx={x} cy={[106, 154, 106, 200, 242, 200][i]} r="24" fill="currentColor" opacity="0.2" />
+        ))}
+      </>
+    )}
+    {motif === "grid" && (
+      <>
+        {[116, 188, 260, 332].map((x) => (
+          <rect x={x} y="82" width="48" height="48" rx="10" fill="currentColor" opacity="0.18" />
+        ))}
+        {[116, 188, 260, 332].map((x) => (
+          <rect x={x} y="166" width="48" height="48" rx="10" fill="currentColor" opacity="0.24" />
+        ))}
+        <path d="M140 130v36M212 130v36M284 130v36M356 130v36M164 106h24M236 106h24M308 106h24M164 190h24M236 190h24M308 190h24" stroke="currentColor" stroke-width="6" stroke-linecap="round" opacity="0.34" />
+      </>
+    )}
+    {motif === "population" && (
+      <>
+        {[140, 210, 280, 350].map((x, i) => (
+          <g opacity={i === 1 ? "0.34" : "0.22"}>
+            <circle cx={x} cy="112" r="22" fill="currentColor" />
+            <path d={`M${x - 34} 210c4-40 20-66 34-66s30 26 34 66`} stroke="currentColor" stroke-width="10" stroke-linecap="round" />
+          </g>
+        ))}
+      </>
+    )}
+  </svg>
+  <div class="absolute bottom-4 left-4 rounded-full border border-border/80 bg-bg/80 px-3 py-1 text-xs font-semibold uppercase tracking-[0.16em] text-muted backdrop-blur dark:border-border-dark/80 dark:bg-bg-dark/80 dark:text-muted-dark">
+    {label}
+  </div>
+</div>

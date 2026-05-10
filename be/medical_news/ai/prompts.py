@@ -43,14 +43,32 @@ Strict editorial rules:
 - Distinguish early-stage research from clinical practice.
 - Cite the original source — do not fabricate findings, statistics, or quotes.
 - Write naturally in Greek, not as a translation. Avoid anglicisms where good Greek equivalents exist.
-- The Greek title must be an editorial headline, not a literal translation. Preserve the core meaning and medical subject, but rewrite it so a Greek reader immediately understands what happened and why it matters.
-- Prefer clear, specific Greek phrasing over awkward noun chains. Avoid starting every title with generic words like "Χρήση", "Ανάπτυξη", "Αξιολόγηση", or "Σύστημα" unless that is truly the news.
 - Do not overclaim. If the source is preliminary, retrospective, simulated, or a preprint, the title or subtitle should make that limitation clear.
 - Extract the medical conditions, diseases, patient groups, or study topic affected by the work. Use concise Greek labels, e.g. "καρκίνος μαστού", "νόσος Alzheimer", "ανδρογενετική αλωπεκία", "καρδιαγγειακός κίνδυνος". If there is no specific condition, include the concrete study topic instead, e.g. "πληρότητα νοσοκομειακών κλινών". Do not invent conditions.
 
+Greek headline rules for titleGr:
+- titleGr is an editorial Greek headline, not a translated paper title.
+- First understand the study, then silently draft 3 Greek headline options and return only the clearest one.
+- Prefer natural Greek word order: [tool/model/intervention] + active verb + [main outcome] + [clinical context].
+- Avoid long stacked genitives and noun chains, especially phrases like "σύστημα αυτοματοποιημένου σχεδιασμού ακτινοθεραπείας".
+- Move the clinical context later when that reads better in Greek.
+- Prefer verbs such as "βελτιώνει", "προβλέπει", "εντοπίζει", "χαρτογραφεί", "εκτιμά", "μειώνει", "ξεχωρίζει" when supported by the study.
+- Avoid starting with generic academic nouns like "Χρήση", "Ανάπτυξη", "Αξιολόγηση", "Δημιουργία", "Σύστημα", or "Μοντέλο" unless there is no more natural option.
+- Keep the title under 90 characters and make it understandable without reading the subtitle.
+- Do not add claims that are not in the source.
+
+Bad titleGr:
+"Νέο σύστημα αυτοματοποιημένου σχεδιασμού ακτινοθεραπείας βελτιώνει την αποτελεσματικότητα"
+
+Better titleGr:
+"Νέο αυτοματοποιημένο σύστημα σχεδιασμού βελτιώνει την αποτελεσματικότητα ακτινοθεραπείας"
+
+Often best:
+"Αυτοματοποιημένος σχεδιασμός βελτιώνει την αποτελεσματικότητα της ακτινοθεραπείας"
+
 Output JSON only with this exact shape:
 {
-  "titleGr": "Greek editorial headline, max 90 chars, natural Greek, not a literal translation, no clickbait",
+  "titleGr": "Greek editorial headline, max 90 chars, natural Greek word order, not a literal paper-title translation, no clickbait",
   "subtitleGr": "Greek subtitle, 1 sentence (≤140 chars), states the main finding plus a key caveat",
   "descriptionGr": "Greek SEO description, 140-160 chars",
   "tags": ["3-6 lowercase tags in English"],
@@ -83,4 +101,4 @@ Original title:
 Original abstract:
 {article['abstract']}
 
-Write the Greek summary now. First decide what the article means, then write a natural Greek headline that preserves meaning without translating word-for-word. Remember the editorial rules. Return JSON only."""
+Write the Greek summary now. First decide what the article means. For titleGr, silently compare 3 possible Greek headlines and choose the one with the most natural Greek word order, clear clinical context, and least noun-stacking. Remember the editorial rules. Return JSON only."""
