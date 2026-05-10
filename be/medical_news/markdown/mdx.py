@@ -51,7 +51,7 @@ def build_mdx(raw: RawArticle, greek: GreekArticle, category: ArticleCategory) -
             f"sourceUrl: {_yaml_string(raw['url'])}",
             f"doi: {_yaml_string(raw['doi'])}" if raw.get("doi") else "",
             f"source: {_yaml_string(raw['source'])}",
-            "published: false",
+            "published: true",
             "generated: true",
             "featured: false",
             "---",

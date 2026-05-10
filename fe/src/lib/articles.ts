@@ -12,6 +12,11 @@ export async function getFeatured(): Promise<Article | undefined> {
   return all.find((a) => a.data.featured) ?? all[0];
 }
 
+export async function getFeaturedArticles(limit = 5): Promise<Article[]> {
+  const all = await getPublishedArticles();
+  return all.filter((a) => a.data.featured).slice(0, limit);
+}
+
 export async function getByCategory(category: string): Promise<Article[]> {
   const all = await getPublishedArticles();
   return all.filter((a) => a.data.category === category);

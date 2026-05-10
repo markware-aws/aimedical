@@ -99,7 +99,7 @@ Body in Greek.
 ...
 ```
 
-Only articles with `published: true` are rendered. The Lambda always writes `published: false` so PR review is the publish gate.
+Only articles with `published: true` are rendered. The Lambda now writes `published: true` by default, so PR review is the quality gate before deployment.
 
 The schema is enforced by Zod in `src/content/config.ts` — `npm run check` will catch frontmatter mistakes.
 

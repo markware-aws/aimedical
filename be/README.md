@@ -8,11 +8,11 @@ fetch (PubMed + arXiv + RSS)
   → relevance score (OpenAI)
   → Greek article generation (OpenAI)
   → MDX file
-  → GitHub PR (draft, published: false)
+  → GitHub PR (draft, published: true)
   → mark processed (DynamoDB)
 ```
 
-PRs are the publish gate. Humans review and flip `published: true` in the article frontmatter.
+PR review is the quality gate before merge; generated articles are visible after deployment once merged.
 
 ---
 
@@ -76,7 +76,7 @@ See `.env.example`. Required at runtime:
 - `AWS_REGION`, `DYNAMODB_TABLE`
 - `RELEVANCE_MIN_SCORE` (default 7), `MAX_ARTICLES_PER_RUN` (default 10)
 
-Generated article PRs target `REPO_DEFAULT_BRANCH`, which defaults to `dev`. Merge generated PRs into `dev`, review/publish there, then merge `dev` into `main` when you want the frontend deployment workflow to run.
+Generated article PRs target `REPO_DEFAULT_BRANCH`, which defaults to `dev`. Review generated PRs there, then merge `dev` into `main` when you want the frontend deployment workflow to run.
 
 ---
 
@@ -124,5 +124,5 @@ These are enforced in `medical_news/ai/prompts.py`. Don't dilute them when editi
 
 - **Order matters:** the PR is opened **before** the DynamoDB write. If the PR succeeds and the DB write fails, dedup may double-process — acceptable. If the DB write happens first and the PR fails, the article is permanently lost — not acceptable.
 - **Dedup key:** prefer DOI (`ARTICLE#10.xxx/...`), fall back to `ARTICLE#<source>#<sourceId>`.
-- **All generated articles ship with `published: false` and `featured: false`** in frontmatter. Human review is the gate.
+- **All generated articles ship with `published: true` and `featured: false`** in frontmatter. PR review is the quality gate before deployment.
 - **Slug:** Greek titles are transliterated to ASCII before slugifying (see `medical_news/normalize/article.py`).

@@ -42,9 +42,17 @@ Strict editorial rules:
 - Distinguish peer-reviewed studies from preprints when relevant.
 - Distinguish early-stage research from clinical practice.
 - Cite the original source — do not fabricate findings, statistics, or quotes.
-- Write naturally in Greek, not as a translation. Avoid anglicisms where good Greek equivalents exist.
+- Write naturally in Greek, not as a translation. Avoid anglicisms where good Greek equivalents exist, but keep widely used English technical terms in English when the Greek rendering sounds unnatural or is not commonly used.
 - Do not overclaim. If the source is preliminary, retrospective, simulated, or a preprint, the title or subtitle should make that limitation clear.
 - Extract the medical conditions, diseases, patient groups, or study topic affected by the work. Use concise Greek labels, e.g. "καρκίνος μαστού", "νόσος Alzheimer", "ανδρογενετική αλωπεκία", "καρδιαγγειακός κίνδυνος". If there is no specific condition, include the concrete study topic instead, e.g. "πληρότητα νοσοκομειακών κλινών". Do not invent conditions.
+
+Terminology rules:
+- Keep established English AI/medical-technology terms in English when Greek sounds forced, comic, or unclear.
+- Prefer "conversational AI", "LLM", "LLMs", "GPT-4o", "GPT-5", "ChatGPT", "Gemini", "foundation model", "transformer", "chatbot", "wearable", "smartwatch", "digital twin", "federated learning", "deep learning", "machine learning", "random forest", "XGBoost", "radiomics", "omics", "biomarker", "dataset", "workflow", "benchmark", and model/product names as English terms unless the source or Greek clinical usage strongly suggests otherwise.
+- Use Greek equivalents only when they are natural and widely understood: "τεχνητή νοημοσύνη" for AI in general prose, "μηχανική μάθηση" for machine learning when it reads naturally, "βαθιά μάθηση" for deep learning when it reads naturally, "σύνολο δεδομένων" for dataset when not awkward.
+- Never translate "LLM" as "μεγάλο γλωσσικό μοντέλο" in titles if "LLM" or "LLMs" is clearer. In body text, you may introduce it once as "LLM (large language model)" if helpful.
+- Do not create unnatural phrases such as "ομιλητικός τεχνητός νοημοσύνης βοηθός". Use "conversational AI βοηθός" or "AI βοηθός συνομιλίας", whichever reads more natural.
+- Mix Greek and English deliberately when that is how Greek clinicians/technologists would speak: "conversational AI βοηθός", "LLM αξιολογεί", "smartwatch εκτιμά", "foundation model προβλέπει".
 
 Greek headline rules for titleGr:
 - titleGr is an editorial Greek headline, not a translated paper title.
@@ -54,6 +62,7 @@ Greek headline rules for titleGr:
 - Move the clinical context later when that reads better in Greek.
 - Prefer verbs such as "βελτιώνει", "προβλέπει", "εντοπίζει", "χαρτογραφεί", "εκτιμά", "μειώνει", "ξεχωρίζει" when supported by the study.
 - Avoid starting with generic academic nouns like "Χρήση", "Ανάπτυξη", "Αξιολόγηση", "Δημιουργία", "Σύστημα", or "Μοντέλο" unless there is no more natural option.
+- If the natural subject is a common English technical term, keep it in English in the headline rather than forcing a Greek translation.
 - Keep the title under 90 characters and make it understandable without reading the subtitle.
 - Do not add claims that are not in the source.
 
@@ -65,6 +74,18 @@ Better titleGr:
 
 Often best:
 "Αυτοματοποιημένος σχεδιασμός βελτιώνει την αποτελεσματικότητα της ακτινοθεραπείας"
+
+Bad titleGr:
+"Ομιλητικός τεχνητός νοημοσύνης βοηθός βελτιώνει τη συναίνεση σε κλινικές μελέτες"
+
+Better titleGr:
+"Conversational AI βοηθός βελτιώνει τη συναίνεση σε κλινικές μελέτες"
+
+Bad titleGr:
+"Μεγάλα γλωσσικά μοντέλα εντοπίζουν κλινικές ενέργειες μετά την έξοδο"
+
+Better titleGr:
+"LLMs εντοπίζουν κλινικές ενέργειες μετά την έξοδο από το νοσοκομείο"
 
 Output JSON only with this exact shape:
 {
