@@ -1,4 +1,4 @@
-# `be/` — AI Medical News Greece backend
+# `be/` - AI Medical News Greece backend
 
 Single Python AWS Lambda that runs the full content pipeline:
 
@@ -32,16 +32,16 @@ python scripts/invoke_local.py
 
 ## Scripts
 
-| Script                                      | Description                                                                 |
-| ------------------------------------------- | --------------------------------------------------------------------------- |
-| `python scripts/invoke_local.py`            | Runs the orchestrator locally end-to-end                                    |
-| `python scripts/invoke_topic.py --query "2025 AI breakthroughs in medicine" --year 2025 --max-articles 3` | Runs a one-off sourced topic query through the same pipeline |
-| `python scripts/invoke_rss.py --dry-run`    | Previews recent articles from curated RSS sources only, without side effects |
-| `python scripts/invoke_rss.py --max-per-source 3 --max-articles 3` | Runs recent curated RSS articles through the same pipeline |
-| `python -m compileall medical_news scripts` | Syntax/import-path smoke check                                              |
-| `bash scripts/package.sh`                   | compile check + dependency install into `dist/` + `function.zip`            |
-| `bash scripts/deploy.sh`                    | package + Lambda upload                                                     |
-| `bash scripts/provision.sh`                 | one-shot AWS CLI provisioning (S3, DynamoDB, IAM, Lambda, EventBridge cron) |
+| Script                                                                                                    | Description                                                                  |
+| --------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------- |
+| `python scripts/invoke_local.py`                                                                          | Runs the orchestrator locally end-to-end                                     |
+| `python scripts/invoke_topic.py --query "2025 AI breakthroughs in medicine" --year 2025 --max-articles 3` | Runs a one-off sourced topic query through the same pipeline                 |
+| `python scripts/invoke_rss.py --dry-run`                                                                  | Previews recent articles from curated RSS sources only, without side effects |
+| `python scripts/invoke_rss.py --max-per-source 3 --max-articles 3`                                        | Runs recent curated RSS articles through the same pipeline                   |
+| `python -m compileall medical_news scripts`                                                               | Syntax/import-path smoke check                                               |
+| `bash scripts/package.sh`                                                                                 | compile check + dependency install into `dist/` + `function.zip`             |
+| `bash scripts/deploy.sh`                                                                                  | package + Lambda upload                                                      |
+| `bash scripts/provision.sh`                                                                               | one-shot AWS CLI provisioning (S3, DynamoDB, IAM, Lambda, EventBridge cron)  |
 
 `deploy.sh` and `provision.sh` use `AWS_PROFILE=aimedical-user` by default; override via env.
 
@@ -122,7 +122,7 @@ These are enforced in `medical_news/ai/prompts.py`. Don't dilute them when editi
 
 ## Pipeline Invariants
 
-- **Order matters:** the PR is opened **before** the DynamoDB write. If the PR succeeds and the DB write fails, dedup may double-process — acceptable. If the DB write happens first and the PR fails, the article is permanently lost — not acceptable.
+- **Order matters:** the PR is opened **before** the DynamoDB write. If the PR succeeds and the DB write fails, dedup may double-process - acceptable. If the DB write happens first and the PR fails, the article is permanently lost - not acceptable.
 - **Dedup key:** prefer DOI (`ARTICLE#10.xxx/...`), fall back to `ARTICLE#<source>#<sourceId>`.
 - **All generated articles ship with `published: true` and `featured: false`** in frontmatter. PR review is the quality gate before deployment.
 - **Slug:** Greek titles are transliterated to ASCII before slugifying (see `medical_news/normalize/article.py`).

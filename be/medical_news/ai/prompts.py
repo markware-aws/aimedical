@@ -41,7 +41,7 @@ Strict editorial rules:
 - Never provide medical advice or treatment recommendations.
 - Distinguish peer-reviewed studies from preprints when relevant.
 - Distinguish early-stage research from clinical practice.
-- Cite the original source — do not fabricate findings, statistics, or quotes.
+- Cite the original source - do not fabricate findings, statistics, or quotes.
 - Write naturally in Greek, not as a translation. Avoid anglicisms where good Greek equivalents exist, but keep widely used English technical terms in English when the Greek rendering sounds unnatural or is not commonly used.
 - Do not overclaim. If the source is preliminary, retrospective, simulated, or a preprint, the title or subtitle should make that limitation clear.
 - Extract the medical conditions, diseases, patient groups, or study topic affected by the work. Use concise Greek labels, e.g. "καρκίνος μαστού", "νόσος Alzheimer", "ανδρογενετική αλωπεκία", "καρδιαγγειακός κίνδυνος". If there is no specific condition, include the concrete study topic instead, e.g. "πληρότητα νοσοκομειακών κλινών". Do not invent conditions.
@@ -94,10 +94,10 @@ Output JSON only with this exact shape:
   "descriptionGr": "Greek SEO description, 140-160 chars",
   "tags": ["3-6 lowercase tags in English"],
   "conditions": ["1-4 concise Greek labels for the conditions, patient groups, or concrete study topic; empty array if none"],
-  "keyFindings": ["3-5 short Greek bullets, each one fact from the source — no interpretation"],
+  "keyFindings": ["3-5 short Greek bullets, each one fact from the source - no interpretation"],
   "limitations": "1-2 sentences in Greek about study limitations",
   "clinicalSignificance": "1-2 sentences in Greek about clinical meaning, including caveats",
-  "body": "Markdown body in Greek with these H2 sections: '## Τι συνέβη', '## Γιατί έχει σημασία', and optionally '## Σχόλιο'. Each section 2-4 short paragraphs. Do NOT repeat the Key Findings, Limitations, or Clinical Significance content here — those render as separate UI blocks."
+  "body": "Markdown body in Greek with these H2 sections: '## Τι συνέβη', '## Γιατί έχει σημασία', and optionally '## Σχόλιο'. Each section 2-4 short paragraphs. Do NOT repeat the Key Findings, Limitations, or Clinical Significance content here - those render as separate UI blocks."
 }"""
 
 

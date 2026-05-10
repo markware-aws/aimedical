@@ -94,7 +94,7 @@ def _required(name: str) -> str:
 def _pr_body(source_url: str) -> str:
     return "\n".join(
         [
-            "Auto-generated draft article — **review before merging**.",
+            "Auto-generated draft article - **review before merging**.",
             "",
             f"Original source: {source_url}",
             "",
