@@ -1,0 +1,147 @@
+---
+import CategoryBadge from "./CategoryBadge.astro";
+import CategoryVisual from "./CategoryVisual.astro";
+import type { Article } from "../lib/articles";
+
+interface Props {
+  articles: Article[];
+}
+
+const { articles } = Astro.props;
+const hasMultiple = articles.length > 1;
+---
+<section class="featured-carousel" aria-label="Προτεινόμενα άρθρα">
+  <div class="mb-5 flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
+    <div>
+      <p class="text-xs font-semibold uppercase tracking-[0.2em] text-accent dark:text-accent-dark">
+        Featured
+      </p>
+      <h2 class="mt-1 text-xl font-semibold tracking-tight md:text-2xl">Επιλεγμένα άρθρα</h2>
+    </div>
+    {hasMultiple && (
+      <div class="flex items-center gap-2">
+        <button
+          type="button"
+          class="featured-prev inline-flex h-9 w-9 items-center justify-center rounded-md border border-border dark:border-border-dark text-ink dark:text-ink-dark transition-colors hover:bg-surface dark:hover:bg-surface-dark"
+          aria-label="Προηγούμενο επιλεγμένο άρθρο"
+        >
+          ←
+        </button>
+        <button
+          type="button"
+          class="featured-next inline-flex h-9 w-9 items-center justify-center rounded-md border border-border dark:border-border-dark text-ink dark:text-ink-dark transition-colors hover:bg-surface dark:hover:bg-surface-dark"
+          aria-label="Επόμενο επιλεγμένο άρθρο"
+        >
+          →
+        </button>
+      </div>
+    )}
+  </div>
+
+  <div class="relative overflow-hidden rounded-xl border border-border dark:border-border-dark bg-surface dark:bg-surface-dark shadow-card">
+    {articles.map((article, index) => {
+      const { title, subtitle, description, date, category, heroImage } = article.data;
+      const dateStr = date.toLocaleDateString("el-GR", { year: "numeric", month: "long", day: "numeric" });
+      return (
+        <a
+          href={`/articles/${article.slug}`}
+          class={`featured-slide group block no-underline ${index === 0 ? "" : "hidden"}`}
+          data-featured-slide
+          aria-hidden={index === 0 ? "false" : "true"}
+        >
+          <article class="grid gap-6 md:grid-cols-2">
+            <div class="aspect-[16/10] overflow-hidden bg-bg dark:bg-bg-dark md:aspect-auto">
+              {heroImage ? (
+                <img
+                  src={heroImage}
+                  alt=""
+                  loading={index === 0 ? "eager" : "lazy"}
+                  decoding="async"
+                  class="h-full w-full object-cover transition-transform duration-500 group-hover:scale-[1.02]"
+                />
+              ) : (
+                <CategoryVisual category={category} />
+              )}
+            </div>
+            <div class="flex min-h-80 flex-col justify-center p-6 md:p-8">
+              <div class="mb-3">
+                <CategoryBadge category={category} size="md" asLink={false} />
+              </div>
+              <h3 class="mb-3 text-2xl font-semibold leading-tight tracking-tight text-ink transition-colors group-hover:text-accent dark:text-ink-dark dark:group-hover:text-accent-dark md:text-3xl">
+                {title}
+              </h3>
+              {subtitle ? (
+                <p class="mb-3 text-base leading-relaxed text-muted dark:text-muted-dark md:text-lg">{subtitle}</p>
+              ) : (
+                description && <p class="mb-3 line-clamp-3 text-base leading-relaxed text-muted dark:text-muted-dark">{description}</p>
+              )}
+              <div class="mt-2 text-xs uppercase tracking-wider text-muted dark:text-muted-dark">
+                <time datetime={date.toISOString()}>{dateStr}</time>
+              </div>
+            </div>
+          </article>
+        </a>
+      );
+    })}
+  </div>
+
+  {hasMultiple && (
+    <div class="mt-4 flex items-center justify-center gap-2" aria-label="Επιλογή επιλεγμένου άρθρου">
+      {articles.map((article, index) => (
+        <button
+          type="button"
+          class={`featured-dot h-2.5 rounded-full transition-all ${index === 0 ? "w-7 bg-accent dark:bg-accent-dark" : "w-2.5 bg-border dark:bg-border-dark"}`}
+          data-featured-dot
+          data-index={index}
+          aria-label={`Προβολή άρθρου ${index + 1}: ${article.data.title}`}
+          aria-current={index === 0 ? "true" : "false"}
+        />
+      ))}
+    </div>
+  )}
+</section>
+
+{hasMultiple && (
+  <script is:inline>
+    (function () {
+      var root = document.currentScript && document.currentScript.previousElementSibling;
+      while (root && !root.classList.contains("featured-carousel")) {
+        root = root.previousElementSibling;
+      }
+      if (!root) return;
+
+      var slides = Array.prototype.slice.call(root.querySelectorAll("[data-featured-slide]"));
+      var dots = Array.prototype.slice.call(root.querySelectorAll("[data-featured-dot]"));
+      var prev = root.querySelector(".featured-prev");
+      var next = root.querySelector(".featured-next");
+      var current = 0;
+
+      function show(index) {
+        current = (index + slides.length) % slides.length;
+        slides.forEach(function (slide, slideIndex) {
+          var active = slideIndex === current;
+          slide.classList.toggle("hidden", !active);
+          slide.setAttribute("aria-hidden", active ? "false" : "true");
+        });
+        dots.forEach(function (dot, dotIndex) {
+          var active = dotIndex === current;
+          dot.classList.toggle("w-7", active);
+          dot.classList.toggle("w-2.5", !active);
+          dot.classList.toggle("bg-accent", active);
+          dot.classList.toggle("dark:bg-accent-dark", active);
+          dot.classList.toggle("bg-border", !active);
+          dot.classList.toggle("dark:bg-border-dark", !active);
+          dot.setAttribute("aria-current", active ? "true" : "false");
+        });
+      }
+
+      if (prev) prev.addEventListener("click", function () { show(current - 1); });
+      if (next) next.addEventListener("click", function () { show(current + 1); });
+      dots.forEach(function (dot) {
+        dot.addEventListener("click", function () {
+          show(Number(dot.getAttribute("data-index") || "0"));
+        });
+      });
+    })();
+  </script>
+)}
