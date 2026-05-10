@@ -1,4 +1,26 @@
 ---
+import { categoryLabel } from "../consts";
+import { getPublishedArticles } from "../lib/articles";
+
+const articles = await getPublishedArticles();
+const searchIndex = articles.map((article) => {
+  const { title, originalTitle, description, subtitle, category, tags, conditions, date } = article.data;
+  const categoryGr = categoryLabel(category);
+  return {
+    title,
+    originalTitle: originalTitle ?? "",
+    description: description ?? subtitle ?? "",
+    category,
+    categoryGr,
+    tags,
+    conditions: conditions ?? [],
+    date: date.toLocaleDateString("el-GR", { year: "numeric", month: "long", day: "numeric" }),
+    url: `/articles/${article.slug}`,
+    searchText: [title, originalTitle, description, subtitle, category, categoryGr, ...tags, ...(conditions ?? [])]
+      .filter(Boolean)
+      .join(" "),
+  };
+});
 ---
 <button
   type="button"
@@ -20,7 +42,7 @@
   aria-label="Αναζήτηση"
   class="fixed inset-0 z-50 hidden items-start justify-center bg-ink/40 p-4 backdrop-blur-sm md:p-16"
 >
-  <div class="w-full max-w-2xl rounded-xl border border-border dark:border-border-dark bg-bg dark:bg-bg-dark shadow-cardHover">
+  <div class="w-full max-w-2xl overflow-hidden rounded-xl border border-border dark:border-border-dark bg-bg dark:bg-bg-dark shadow-cardHover">
     <div class="flex items-center gap-3 border-b border-border dark:border-border-dark px-4 py-3">
       <svg class="h-5 w-5 text-muted dark:text-muted-dark" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
         <circle cx="11" cy="11" r="7" />
@@ -40,12 +62,24 @@
         aria-label="Κλείσιμο"
       >Esc</button>
     </div>
-    <div class="px-4 py-6 text-sm text-muted dark:text-muted-dark">
-      <p>Η αναζήτηση είναι υπό κατασκευή.</p>
-      <p class="mt-2">Στο μεταξύ, εξερευνήστε τις <a href="/category/oncology">κατηγορίες</a> ή το <a href="/rss.xml">RSS</a>.</p>
+    <div class="max-h-[65vh] overflow-y-auto">
+      <div id="search-empty" class="px-4 py-6 text-sm text-muted dark:text-muted-dark">
+        Πληκτρολογήστε έναν όρο, μια πάθηση, κατηγορία ή tag.
+      </div>
+      <div id="search-no-results" class="hidden px-4 py-6 text-sm text-muted dark:text-muted-dark">
+        Δεν βρέθηκαν άρθρα. Δοκιμάστε πιο γενικό όρο ή δείτε όλες τις <a href="/categories">κατηγορίες</a>.
+      </div>
+      <div id="search-results" class="divide-y divide-border dark:divide-border-dark"></div>
+      <div class="border-t border-border dark:border-border-dark bg-surface/70 dark:bg-surface-dark/70 px-4 py-3 text-xs text-muted dark:text-muted-dark">
+        <a href="/search" class="font-medium">Άνοιγμα πλήρους αναζήτησης</a>
+        <span class="mx-2" aria-hidden="true">·</span>
+        <span>Ctrl/⌘ K</span>
+      </div>
     </div>
   </div>
 </div>
+
+<script is:inline type="application/json" id="search-overlay-data" set:html={JSON.stringify(searchIndex)} />
 
 <script is:inline>
   (function () {
@@ -53,7 +87,80 @@
     var overlay = document.getElementById("search-overlay");
     var closeBtn = document.getElementById("search-close");
     var input = document.getElementById("search-input");
-    if (!openBtn || !overlay || !closeBtn || !input) return;
+    var data = document.getElementById("search-overlay-data");
+    var results = document.getElementById("search-results");
+    var empty = document.getElementById("search-empty");
+    var noResults = document.getElementById("search-no-results");
+    if (!openBtn || !overlay || !closeBtn || !input || !data || !results || !empty || !noResults) return;
+
+    var articles = JSON.parse(data.textContent || "[]").map(function (article) {
+      article.normalizedSearchText = normalize(article.searchText);
+      return article;
+    });
+
+    function normalize(value) {
+      return String(value || "")
+        .toLowerCase()
+        .normalize("NFD")
+        .replace(/[\u0300-\u036f]/g, "")
+        .replace(/ς/g, "σ");
+    }
+
+    function clear(node) {
+      while (node.firstChild) node.removeChild(node.firstChild);
+    }
+
+    function renderResult(article) {
+      var link = document.createElement("a");
+      link.href = article.url;
+      link.className = "block px-4 py-4 no-underline transition-colors hover:bg-surface dark:hover:bg-surface-dark";
+
+      var meta = document.createElement("div");
+      meta.className = "mb-1 flex flex-wrap items-center gap-2 text-xs text-muted dark:text-muted-dark";
+
+      var category = document.createElement("span");
+      category.className = "rounded-full border border-border dark:border-border-dark px-2 py-0.5";
+      category.textContent = article.categoryGr;
+
+      var date = document.createElement("span");
+      date.textContent = article.date;
+
+      meta.appendChild(category);
+      meta.appendChild(date);
+
+      var title = document.createElement("h3");
+      title.className = "text-base font-semibold leading-snug text-ink dark:text-ink-dark";
+      title.textContent = article.title;
+
+      var description = document.createElement("p");
+      description.className = "mt-1 line-clamp-2 text-sm leading-relaxed text-muted dark:text-muted-dark";
+      description.textContent = article.description;
+
+      link.appendChild(meta);
+      link.appendChild(title);
+      if (article.description) link.appendChild(description);
+      return link;
+    }
+
+    function runSearch() {
+      var query = normalize(input.value);
+      clear(results);
+      if (!query) {
+        empty.classList.remove("hidden");
+        noResults.classList.add("hidden");
+        return;
+      }
+
+      var matches = articles.filter(function (article) {
+        return article.normalizedSearchText.indexOf(query) !== -1;
+      }).slice(0, 8);
+
+      empty.classList.add("hidden");
+      noResults.classList.toggle("hidden", matches.length > 0);
+      matches.forEach(function (article) {
+        results.appendChild(renderResult(article));
+      });
+    }
 
     function open() {
       overlay.classList.remove("hidden");
@@ -63,10 +170,13 @@
     function close() {
       overlay.classList.add("hidden");
       overlay.classList.remove("flex");
+      input.value = "";
+      runSearch();
     }
 
     openBtn.addEventListener("click", open);
     closeBtn.addEventListener("click", close);
+    input.addEventListener("input", runSearch);
     overlay.addEventListener("click", function (e) {
       if (e.target === overlay) close();
     });

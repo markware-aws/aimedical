@@ -1,5 +1,6 @@
-export const SITE_NAME = "AI Medical News Greece";
-export const SITE_TAGLINE = "Ενημέρωση για την τεχνητή νοημοσύνη στην ιατρική";
+export const SITE_NAME = "Medical AI Breakthroughs";
+export const SITE_TAGLINE =
+  "Ενημέρωση για τις νέες εφαρμογές της τεχνητής νοημοσύνης στην ιατρική";
 export const SITE_URL = import.meta.env.SITE ?? "https://aimedical.gr";
 
 export const CATEGORIES = [
@@ -19,7 +20,13 @@ export const CATEGORIES = [
   { slug: "other", labelGr: "Άλλα" },
 ] as const;
 
-export const PRIMARY_NAV_CATEGORIES = ["oncology", "cardiology", "neurology", "diagnostics", "radiology"] as const;
+export const PRIMARY_NAV_CATEGORIES = [
+  "oncology",
+  "cardiology",
+  "neurology",
+  "diagnostics",
+  "radiology",
+] as const;
 
 export type CategorySlug = (typeof CATEGORIES)[number]["slug"];
 

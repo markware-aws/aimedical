@@ -1,5 +1,6 @@
 ---
 import CategoryBadge from "./CategoryBadge.astro";
+import CategoryVisual from "./CategoryVisual.astro";
 import type { Article } from "../lib/articles";
 
 interface Props { article: Article }
@@ -20,11 +21,7 @@ const dateStr = date.toLocaleDateString("el-GR", { year: "numeric", month: "long
           class="h-full w-full object-cover transition-transform duration-500 group-hover:scale-[1.02]"
         />
       ) : (
-        <div class="flex h-full w-full items-center justify-center bg-gradient-to-br from-accent/10 to-teal/10 dark:from-accent-dark/15 dark:to-teal-dark/10">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2" class="h-16 w-16 text-accent/40 dark:text-accent-dark/40" aria-hidden="true">
-            <path d="M3 12h4l3-9 4 18 3-9h4" stroke-linecap="round" stroke-linejoin="round" />
-          </svg>
-        </div>
+        <CategoryVisual category={category} />
       )}
     </div>
     <div class="flex flex-col justify-center p-6 md:p-8">

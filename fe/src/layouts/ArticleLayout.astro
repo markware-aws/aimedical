@@ -6,6 +6,7 @@ import RelatedArticles from "../components/RelatedArticles.astro";
 import CategoryBadge from "../components/CategoryBadge.astro";
 import ArticleSections from "../components/ArticleSections.astro";
 import TagChips from "../components/TagChips.astro";
+import CategoryVisual from "../components/CategoryVisual.astro";
 import type { Article } from "../lib/articles";
 
 interface Props {
@@ -33,6 +34,7 @@ const {
 } = article.data;
 const slug = article.slug;
 const dateStr = date.toLocaleDateString("el-GR", { year: "numeric", month: "long", day: "numeric" });
+const primaryCondition = conditions?.[0];
 ---
 <BaseLayout
   title={title}
@@ -57,14 +59,12 @@ const dateStr = date.toLocaleDateString("el-GR", { year: "numeric", month: "long
           <span class="font-medium text-ink dark:text-ink-dark">Original title:</span> {originalTitle}
         </p>
       )}
-      {conditions && conditions.length > 0 && (
+      {primaryCondition && (
         <div class="mt-4 flex flex-wrap items-center gap-2 text-sm">
           <span class="text-muted dark:text-muted-dark">Αφορά:</span>
-          {conditions.map((condition) => (
-            <span class="rounded-full border border-border dark:border-border-dark bg-surface dark:bg-surface-dark px-3 py-1 text-xs font-medium text-ink dark:text-ink-dark">
-              {condition}
-            </span>
-          ))}
+          <span class="rounded-full border border-border dark:border-border-dark bg-surface dark:bg-surface-dark px-3 py-1 text-xs font-medium text-ink dark:text-ink-dark">
+            {primaryCondition}
+          </span>
         </div>
       )}
       {tags.length > 0 && (
@@ -82,8 +82,8 @@ const dateStr = date.toLocaleDateString("el-GR", { year: "numeric", month: "long
       </div>
     </header>
 
-    {heroImage && (
-      <figure class="my-8 -mx-4 overflow-hidden rounded-lg md:mx-0">
+    <figure class="my-8 -mx-4 overflow-hidden rounded-lg md:mx-0">
+      {heroImage ? (
         <img
           src={heroImage}
           alt=""
@@ -91,8 +91,10 @@ const dateStr = date.toLocaleDateString("el-GR", { year: "numeric", month: "long
           loading="eager"
           decoding="async"
         />
-      </figure>
-    )}
+      ) : (
+        <CategoryVisual category={category} class="aspect-[16/9]" />
+      )}
+    </figure>
 
     <div class="prose-article">
       <slot />
