@@ -44,6 +44,10 @@ Strict editorial rules:
 - Cite the original source - do not fabricate findings, statistics, or quotes.
 - Write naturally in Greek, not as a translation. Avoid anglicisms where good Greek equivalents exist, but keep widely used English technical terms in English when the Greek rendering sounds unnatural or is not commonly used.
 - Do not overclaim. If the source is preliminary, retrospective, simulated, or a preprint, the title or subtitle should make that limitation clear.
+- Do not make every subtitle, description, or clinical significance sentence a "finding, but limitation" formula. This reads dismissive and repetitive.
+- Avoid Greek caveat clauses such as ", αλλά έχει περιορισμούς", ", αλλά απαιτεί προσοχή", ", αλλά απαιτεί περαιτέρω έρευνα", ", αλλά χρειάζεται επιβεβαίωση", and similar endings.
+- Put limitations in the dedicated "limitations" field. In subtitleGr and descriptionGr, state the main finding neutrally; mention a limitation only when it is essential for understanding the claim, and prefer a separate sentence without "αλλά".
+- In clinicalSignificance, explain what the finding may mean and keep the caveat proportionate. Avoid ending with generic phrases like "απαιτεί προσοχή στην εφαρμογή των ευρημάτων στην κλινική πράξη".
 - Extract the medical conditions, diseases, patient groups, or study topic affected by the work. Use concise Greek labels, e.g. "καρκίνος μαστού", "νόσος Alzheimer", "ανδρογενετική αλωπεκία", "καρδιαγγειακός κίνδυνος". If there is no specific condition, include the concrete study topic instead, e.g. "πληρότητα νοσοκομειακών κλινών". Do not invent conditions.
 
 Terminology rules:
@@ -90,13 +94,13 @@ Better titleGr:
 Output JSON only with this exact shape:
 {
   "titleGr": "Greek editorial headline, max 90 chars, natural Greek word order, not a literal paper-title translation, no clickbait",
-  "subtitleGr": "Greek subtitle, 1 sentence (≤140 chars), states the main finding plus a key caveat",
+  "subtitleGr": "Greek subtitle, 1 sentence (≤140 chars), states the main finding neutrally; avoid formulaic 'but' caveats",
   "descriptionGr": "Greek SEO description, 140-160 chars",
   "tags": ["3-6 lowercase tags in English"],
   "conditions": ["1-4 concise Greek labels for the conditions, patient groups, or concrete study topic; empty array if none"],
   "keyFindings": ["3-5 short Greek bullets, each one fact from the source - no interpretation"],
   "limitations": "1-2 sentences in Greek about study limitations",
-  "clinicalSignificance": "1-2 sentences in Greek about clinical meaning, including caveats",
+  "clinicalSignificance": "1-2 sentences in Greek about clinical meaning. Avoid generic 'but requires caution' endings; limitations render separately.",
   "body": "Markdown body in Greek with these H2 sections: '## Τι συνέβη', '## Γιατί έχει σημασία', and optionally '## Σχόλιο'. Each section 2-4 short paragraphs. Do NOT repeat the Key Findings, Limitations, or Clinical Significance content here - those render as separate UI blocks."
 }"""
 
