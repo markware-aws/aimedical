@@ -36,6 +36,8 @@ python scripts/invoke_local.py
 | ------------------------------------------- | --------------------------------------------------------------------------- |
 | `python scripts/invoke_local.py`            | Runs the orchestrator locally end-to-end                                    |
 | `python scripts/invoke_topic.py --query "2025 AI breakthroughs in medicine" --year 2025 --max-articles 3` | Runs a one-off sourced topic query through the same pipeline |
+| `python scripts/invoke_rss.py --dry-run`    | Previews recent articles from curated RSS sources only, without side effects |
+| `python scripts/invoke_rss.py --max-per-source 3 --max-articles 3` | Runs recent curated RSS articles through the same pipeline |
 | `python -m compileall medical_news scripts` | Syntax/import-path smoke check                                              |
 | `bash scripts/package.sh`                   | compile check + dependency install into `dist/` + `function.zip`            |
 | `bash scripts/deploy.sh`                    | package + Lambda upload                                                     |
@@ -50,6 +52,18 @@ python scripts/invoke_topic.py --query "2025 AI breakthroughs in medicine" --yea
 ```
 
 Use `--source pubmed` or `--source arxiv` to limit the query while testing.
+
+RSS-only runs use the curated journal feeds in `medical_news/feeds/rss.py`. Preview candidates first:
+
+```powershell
+python scripts/invoke_rss.py --dry-run --max-per-source 5
+```
+
+Then run the recent RSS candidates through the full pipeline:
+
+```powershell
+python scripts/invoke_rss.py --max-per-source 3 --max-articles 3
+```
 
 ---
 

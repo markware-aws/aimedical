@@ -34,6 +34,7 @@ const {
 } = article.data;
 const slug = article.slug;
 const dateStr = date.toLocaleDateString("el-GR", { year: "numeric", month: "long", day: "numeric" });
+const primaryCondition = conditions?.[0];
 ---
 <BaseLayout
   title={title}
@@ -58,14 +59,12 @@ const dateStr = date.toLocaleDateString("el-GR", { year: "numeric", month: "long
           <span class="font-medium text-ink dark:text-ink-dark">Original title:</span> {originalTitle}
         </p>
       )}
-      {conditions && conditions.length > 0 && (
+      {primaryCondition && (
         <div class="mt-4 flex flex-wrap items-center gap-2 text-sm">
           <span class="text-muted dark:text-muted-dark">Αφορά:</span>
-          {conditions.map((condition) => (
-            <span class="rounded-full border border-border dark:border-border-dark bg-surface dark:bg-surface-dark px-3 py-1 text-xs font-medium text-ink dark:text-ink-dark">
-              {condition}
-            </span>
-          ))}
+          <span class="rounded-full border border-border dark:border-border-dark bg-surface dark:bg-surface-dark px-3 py-1 text-xs font-medium text-ink dark:text-ink-dark">
+            {primaryCondition}
+          </span>
         </div>
       )}
       {tags.length > 0 && (
