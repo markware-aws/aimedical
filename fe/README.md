@@ -1,8 +1,8 @@
-# `fe/` — AI Medical News Greece frontend
+# `fe/` - AI Medical News Greece frontend
 
 Static Greek-language news site about AI in medicine. Astro + Tailwind + MDX, fully static, deployed to S3 behind Cloudflare CDN.
 
-Visual identity is editorial / scientific (think *Nature Medicine* + *MIT Technology Review* + *Apple News*) — never crypto / startup / AI-hype aesthetics. See `../UI_NEW.md` for the full spec.
+Visual identity is editorial / scientific (think _Nature Medicine_ + _MIT Technology Review_ + _Apple News_) - never crypto / startup / AI-hype aesthetics. See `../UI_NEW.md` for the full spec.
 
 ---
 
@@ -19,12 +19,12 @@ npm run dev      # http://localhost:4321
 
 ## Scripts
 
-| Script | Description |
-| --- | --- |
-| `npm run dev` | Astro dev server with HMR |
-| `npm run build` | Static build → `dist/` |
-| `npm run preview` | Preview the built site |
-| `npm run check` | `astro check` (TypeScript + content schema) |
+| Script            | Description                                 |
+| ----------------- | ------------------------------------------- |
+| `npm run dev`     | Astro dev server with HMR                   |
+| `npm run build`   | Static build → `dist/`                      |
+| `npm run preview` | Preview the built site                      |
+| `npm run check`   | `astro check` (TypeScript + content schema) |
 
 ---
 
@@ -74,13 +74,13 @@ title: "Greek title here"
 subtitle: "Optional subtitle"
 date: 2026-05-07
 description: "SEO description, 140-160 chars"
-category: "oncology"   # see CATEGORIES in src/consts.ts
+category: "oncology" # see CATEGORIES in src/consts.ts
 tags: ["ai", "oncology"]
-heroImage: "/images/article.jpg"  # optional
+heroImage: "/images/article.jpg" # optional
 sourceUrl: "https://pubmed.ncbi.nlm.nih.gov/12345/"
-doi: "10.0000/example"             # optional
-source: "pubmed"                   # optional
-keyFindings:                       # optional, renders as a callout
+doi: "10.0000/example" # optional
+source: "pubmed" # optional
+keyFindings: # optional, renders as a callout
   - "Bullet 1"
   - "Bullet 2"
 studyLimitations: "Optional, renders as a callout"
@@ -101,7 +101,7 @@ Body in Greek.
 
 Only articles with `published: true` are rendered. The Lambda now writes `published: true` by default, so PR review is the quality gate before deployment.
 
-The schema is enforced by Zod in `src/content/config.ts` — `npm run check` will catch frontmatter mistakes.
+The schema is enforced by Zod in `src/content/config.ts` - `npm run check` will catch frontmatter mistakes.
 
 ---
 
@@ -109,20 +109,20 @@ The schema is enforced by Zod in `src/content/config.ts` — `npm run check` wil
 
 Colors (Tailwind tokens, all have a `.dark` variant):
 
-| Token | Light | Use |
-| --- | --- | --- |
-| `bg` | `#FFFFFF` | page background |
-| `surface` | `#FAFAF7` | cards, callouts |
-| `ink` | `#1A1A1A` | body text |
-| `muted` | `#5C5C5C` | meta, dates |
-| `accent` | `#0F4C75` | links, primary accent (deep blue) |
-| `teal` | `#2A7F7E` | Key Findings block |
-| `med` | `#3D7B5F` | Clinical Significance block |
-| `border` | `#E5E5E0` | hairline dividers |
+| Token     | Light     | Use                               |
+| --------- | --------- | --------------------------------- |
+| `bg`      | `#FFFFFF` | page background                   |
+| `surface` | `#FAFAF7` | cards, callouts                   |
+| `ink`     | `#1A1A1A` | body text                         |
+| `muted`   | `#5C5C5C` | meta, dates                       |
+| `accent`  | `#0F4C75` | links, primary accent (deep blue) |
+| `teal`    | `#2A7F7E` | Key Findings block                |
+| `med`     | `#3D7B5F` | Clinical Significance block       |
+| `border`  | `#E5E5E0` | hairline dividers                 |
 
 Dark mode: `class` strategy. Anti-FOUC inline script in `<head>` (see `ThemeScript.astro`). Toggle persists to `localStorage`. Dark uses `#16191C` charcoal, never pure black.
 
-Font: Inter (loaded from `rsms.me/inter`). Sans-serif throughout — no serif body.
+Font: Inter (loaded from `rsms.me/inter`). Sans-serif throughout - no serif body.
 
 ---
 
