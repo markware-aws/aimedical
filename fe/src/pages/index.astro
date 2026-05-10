@@ -11,7 +11,7 @@ const allArticles = await getPublishedArticles();
 const latest = allArticles.filter((a) => a.slug !== featured?.slug).slice(0, 9);
 const categories = CATEGORIES.filter((c) => c.slug !== "other").slice(0, 6);
 ---
-<BaseLayout title="AI Medical News Greece" description={SITE_TAGLINE} canonicalPath="/" isHome={true}>
+<BaseLayout title="Medical AI Breakthroughs" description={SITE_TAGLINE} canonicalPath="/" isHome={true}>
   <section class="mb-10">
     <p class="mb-2 text-xs font-semibold uppercase tracking-[0.2em] text-accent dark:text-accent-dark">
       Ελληνική έκδοση

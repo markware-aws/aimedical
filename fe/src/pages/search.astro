@@ -1,0 +1,166 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import ArticleCard from "../components/ArticleCard.astro";
+import { CATEGORIES, categoryLabel } from "../consts";
+import { getPublishedArticles } from "../lib/articles";
+
+const articles = await getPublishedArticles();
+const categoryOptions = CATEGORIES.filter((category) => articles.some((article) => article.data.category === category.slug));
+
+function normalizeSearch(value: string): string {
+  return value
+    .toLowerCase()
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .replace(/ς/g, "σ");
+}
+
+const searchableArticles = articles.map((article) => {
+  const { title, originalTitle, description, subtitle, category, tags, conditions } = article.data;
+  const categoryGr = categoryLabel(category);
+  return {
+    article,
+    categoryGr,
+    searchText: normalizeSearch(
+      [title, originalTitle, description, subtitle, category, categoryGr, ...tags, ...(conditions ?? [])]
+        .filter(Boolean)
+        .join(" "),
+    ),
+  };
+});
+---
+<BaseLayout
+  title="Αναζήτηση"
+  description="Αναζητήστε άρθρα για την τεχνητή νοημοσύνη στην ιατρική ανά τίτλο, περιγραφή, tag, πάθηση ή κατηγορία."
+  canonicalPath="/search"
+>
+  <section class="mb-8 overflow-hidden rounded-2xl border border-border dark:border-border-dark bg-surface dark:bg-surface-dark">
+    <div class="relative p-6 md:p-8">
+      <div class="absolute inset-y-0 right-0 hidden w-1/3 bg-[radial-gradient(circle_at_70%_35%,rgba(15,76,117,0.16),transparent_36%),radial-gradient(circle_at_40%_75%,rgba(42,127,126,0.14),transparent_34%)] dark:bg-[radial-gradient(circle_at_70%_35%,rgba(91,163,208,0.18),transparent_36%),radial-gradient(circle_at_40%_75%,rgba(93,181,179,0.16),transparent_34%)] md:block" aria-hidden="true" />
+      <div class="relative max-w-3xl">
+        <p class="text-xs font-semibold uppercase tracking-[0.2em] text-accent dark:text-accent-dark">
+          Αναζήτηση
+        </p>
+        <h1 class="mt-2 text-3xl font-semibold tracking-tight md:text-4xl">Βρείτε άρθρα γρήγορα</h1>
+        <p class="mt-3 text-sm leading-relaxed text-muted dark:text-muted-dark">
+          Αναζήτηση σε τίτλους, περιγραφές, πρωτότυπους τίτλους, tags, παθήσεις και κατηγορίες. Η αναζήτηση δουλεύει τοπικά στον browser και αγνοεί τους τόνους.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <section class="mb-8 rounded-xl border border-border dark:border-border-dark bg-bg dark:bg-bg-dark p-4 shadow-card">
+    <label for="search-page-input" class="sr-only">Αναζήτηση άρθρων</label>
+    <div class="flex items-center gap-3 rounded-lg border border-border dark:border-border-dark bg-surface dark:bg-surface-dark px-4 py-3">
+      <svg class="h-5 w-5 shrink-0 text-muted dark:text-muted-dark" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <circle cx="11" cy="11" r="7" />
+        <path d="m20 20-3.5-3.5" />
+      </svg>
+      <input
+        id="search-page-input"
+        type="search"
+        placeholder="π.χ. καρκίνος, radiology, Alzheimer, GPT"
+        class="w-full bg-transparent text-base text-ink dark:text-ink-dark placeholder:text-muted dark:placeholder:text-muted-dark focus:outline-none"
+        autocomplete="off"
+      />
+    </div>
+
+    <div class="mt-4 flex flex-wrap gap-2" aria-label="Φίλτρα κατηγοριών">
+      <button
+        type="button"
+        class="search-category rounded-full border border-accent/40 bg-accent/10 px-3 py-1 text-xs font-medium text-accent dark:border-accent-dark/40 dark:bg-accent-dark/10 dark:text-accent-dark"
+        data-category=""
+        aria-pressed="true"
+      >
+        Όλα
+      </button>
+      {categoryOptions.map((category) => (
+        <button
+          type="button"
+          class="search-category rounded-full border border-border dark:border-border-dark px-3 py-1 text-xs font-medium text-muted dark:text-muted-dark transition-colors hover:border-accent/40 hover:text-accent dark:hover:border-accent-dark/40 dark:hover:text-accent-dark"
+          data-category={category.slug}
+          aria-pressed="false"
+        >
+          {category.labelGr}
+        </button>
+      ))}
+    </div>
+
+    <p class="mt-4 text-sm text-muted dark:text-muted-dark">
+      <span id="search-count">{articles.length}</span> {articles.length === 1 ? "άρθρο" : "άρθρα"}
+    </p>
+  </section>
+
+  <section id="search-list" class="grid gap-4 md:grid-cols-2 lg:grid-cols-3" aria-live="polite">
+    {searchableArticles.map(({ article, categoryGr, searchText }) => (
+      <div data-search-item data-search-text={searchText} data-category={article.data.category}>
+        <ArticleCard article={article} />
+        <span class="sr-only">{categoryGr}</span>
+      </div>
+    ))}
+  </section>
+
+  <p id="search-empty-state" class="hidden rounded-lg border border-border dark:border-border-dark bg-surface dark:bg-surface-dark p-8 text-center text-muted dark:text-muted-dark">
+    Δεν βρέθηκαν άρθρα για αυτή την αναζήτηση.
+  </p>
+</BaseLayout>
+
+<script is:inline>
+  (function () {
+    var input = document.getElementById("search-page-input");
+    var count = document.getElementById("search-count");
+    var emptyState = document.getElementById("search-empty-state");
+    var buttons = Array.prototype.slice.call(document.querySelectorAll(".search-category"));
+    var items = Array.prototype.slice.call(document.querySelectorAll("[data-search-item]"));
+    var activeCategory = "";
+    if (!input || !count || !emptyState) return;
+
+    function normalize(value) {
+      return String(value || "")
+        .toLowerCase()
+        .normalize("NFD")
+        .replace(/[\u0300-\u036f]/g, "")
+        .replace(/ς/g, "σ");
+    }
+
+    function setActiveButton(nextCategory) {
+      buttons.forEach(function (button) {
+        var isActive = button.getAttribute("data-category") === nextCategory;
+        button.setAttribute("aria-pressed", String(isActive));
+        button.classList.toggle("border-accent/40", isActive);
+        button.classList.toggle("bg-accent/10", isActive);
+        button.classList.toggle("text-accent", isActive);
+        button.classList.toggle("dark:border-accent-dark/40", isActive);
+        button.classList.toggle("dark:bg-accent-dark/10", isActive);
+        button.classList.toggle("dark:text-accent-dark", isActive);
+        button.classList.toggle("border-border", !isActive);
+        button.classList.toggle("dark:border-border-dark", !isActive);
+        button.classList.toggle("text-muted", !isActive);
+        button.classList.toggle("dark:text-muted-dark", !isActive);
+      });
+    }
+
+    function filter() {
+      var query = normalize(input.value);
+      var visible = 0;
+      items.forEach(function (item) {
+        var matchesQuery = !query || (item.getAttribute("data-search-text") || "").indexOf(query) !== -1;
+        var matchesCategory = !activeCategory || item.getAttribute("data-category") === activeCategory;
+        var show = matchesQuery && matchesCategory;
+        item.classList.toggle("hidden", !show);
+        if (show) visible += 1;
+      });
+      count.textContent = String(visible);
+      emptyState.classList.toggle("hidden", visible > 0);
+    }
+
+    input.addEventListener("input", filter);
+    buttons.forEach(function (button) {
+      button.addEventListener("click", function () {
+        activeCategory = button.getAttribute("data-category") || "";
+        setActiveButton(activeCategory);
+        filter();
+      });
+    });
+  })();
+</script>
