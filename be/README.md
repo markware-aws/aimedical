@@ -72,6 +72,7 @@ python scripts/invoke_rss.py --max-per-source 3 --max-articles 3
 See `.env.example`. Required at runtime:
 
 - `OPENAI_API_KEY`, `OPENAI_MODEL`
+- `DEEPL_API_KEY` (optional; when present, article titles are translated with DeepL)
 - `GITHUB_TOKEN`, `REPO_OWNER`, `REPO_NAME`, `REPO_DEFAULT_BRANCH`
 - `AWS_REGION`, `DYNAMODB_TABLE`
 - `RELEVANCE_MIN_SCORE` (default 7), `MAX_ARTICLES_PER_RUN` (default 10)
