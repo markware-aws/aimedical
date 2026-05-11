@@ -3,9 +3,11 @@ from __future__ import annotations
 import json
 from typing import Any
 
+from medical_news.ai.deepl_client import translate_title_to_greek
 from medical_news.ai.openai_client import chat_json
 from medical_news.ai.prompts import GENERATOR_SYSTEM, generator_user_prompt
 from medical_news.types import GreekArticle, RawArticle
+from medical_news.util import logger
 
 
 def generate_greek(article: RawArticle) -> GreekArticle:
@@ -23,8 +25,10 @@ def generate_greek(article: RawArticle) -> GreekArticle:
     if not title or not body:
         raise ValueError("generator returned incomplete article")
 
+    deepl_title = _translate_title(article["title"])
+
     return {
-        "title_gr": str(title),
+        "title_gr": deepl_title or str(title),
         "subtitle_gr": str(parsed.get("subtitleGr") or ""),
         "description_gr": str(parsed.get("descriptionGr") or ""),
         "body": str(body),
@@ -38,3 +42,11 @@ def generate_greek(article: RawArticle) -> GreekArticle:
         "limitations": str(parsed.get("limitations") or ""),
         "clinical_significance": str(parsed.get("clinicalSignificance") or ""),
     }
+
+
+def _translate_title(title: str) -> str | None:
+    try:
+        return translate_title_to_greek(title)
+    except Exception as exc:
+        logger.warn("deepl title translation failed", {"err": str(exc)})
+        return None
