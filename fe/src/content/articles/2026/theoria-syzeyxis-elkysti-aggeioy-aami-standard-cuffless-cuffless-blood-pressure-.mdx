@@ -1,0 +1,52 @@
+---
+title: "Θεωρία σύζευξης ελκυστή-αγγείου: AAMI-Standard Cuffless Cuffless Blood Pressure Estimation from Smartphone Photoplethysmography: Formal Grounding and Empirical Validation for AAMI-Standard Cuffless Blood Pressure Estimation from Smartphone Photoplethysmography"
+originalTitle: "Attractor-Vascular Coupling Theory: Formal Grounding and Empirical Validation for AAMI-Standard Cuffless Blood Pressure Estimation from Smartphone Photoplethysmography"
+subtitle: "Σε 46 άτομα, μοντέλο με smartphone PPG έφτασε σφάλμα κάτω από 5 mmHg για συστολική και διαστολική πίεση."
+date: "2026-05-11"
+description: "Μοντέλο cuffless μέτρησης αρτηριακής πίεσης από smartphone PPG έδειξε χαμηλό σφάλμα σε 46 άτομα, με εκπαίδευση σε ICU και χειρουργικά δεδομένα."
+category: "diagnostics"
+tags:
+  - "photoplethysmography"
+  - "blood pressure"
+  - "smartphone"
+  - "machine learning"
+  - "cuffless"
+keyFindings:
+  - "Η μελέτη πρότεινε την Attractor-Vascular Coupling Theory (AVCT) ως μαθηματικό πλαίσιο για εκτίμηση αρτηριακής πίεσης από PPG."
+  - "Το μοντέλο LightGBM χρησιμοποιήθηκε με χαρακτηριστικά από PTT και Cardiac Stability Index (CSI) μετά από single-point calibration."
+  - "Σε strict leave-one-subject-out cross-validation σε 46 άτομα, το σφάλμα ήταν 2.05 mmHg για τη συστολική και 1.67 mmHg για τη διαστολική πίεση."
+  - "Οι συσχετίσεις με τις πραγματικές τιμές ήταν r = 0.990 για τη συστολική και r = 0.991 για τη διαστολική πίεση."
+  - "Ένα PPG-only μοντέλο με εννέα χαρακτηριστικά από smartphone camera έδωσε παρόμοια επίδοση με το μοντέλο ECG+PPG."
+conditions:
+  - "αρτηριακή πίεση"
+  - "υπέρταση"
+  - "παρακολούθηση ζωτικών σημείων"
+studyLimitations: "Πρόκειται για προεκτυπωμένη εργασία στο arXiv και όχι για peer-reviewed δημοσίευση. Η αξιολόγηση έγινε σε 46 άτομα από δύο κλινικά σύνολα δεδομένων, με single-point calibration και εξωτερική γενίκευση που δεν έχει ακόμη τεκμηριωθεί ευρύτερα."
+clinicalSignificance: "Τα ευρήματα δείχνουν ότι η εκτίμηση αρτηριακής πίεσης χωρίς περιχειρίδα από smartphone PPG μπορεί να πλησιάσει κλινικά αποδεκτά όρια σφάλματος σε ελεγχόμενο πλαίσιο. Αν επιβεβαιωθεί σε μεγαλύτερους και πιο ετερογενείς πληθυσμούς, η προσέγγιση θα μπορούσε να στηρίξει πιο εύκολη παρακολούθηση της πίεσης."
+sourceUrl: "http://arxiv.org/abs/2605.10871v1"
+source: "arxiv"
+published: true
+generated: true
+featured: false
+---
+## Τι συνέβη
+
+Οι συγγραφείς πρότειναν την Attractor-Vascular Coupling Theory (AVCT), ένα μαθηματικό πλαίσιο που συνδέει τη μορφολογία του καρδιακού attractor με την αρτηριακή πίεση.
+
+Στη συνέχεια δοκίμασαν ένα μοντέλο LightGBM με χαρακτηριστικά από photoplethysmography (PPG), pulse transit time (PTT) και Cardiac Stability Index (CSI), με single-point calibration.
+
+Η αξιολόγηση έγινε με strict leave-one-subject-out cross-validation σε 46 άτομα από ICU και χειρουργικά δεδομένα.
+
+## Γιατί έχει σημασία
+
+Η μελέτη εξετάζει αν ένα smartphone μπορεί, με τη βοήθεια PPG, να δώσει εκτίμηση αρτηριακής πίεσης χωρίς περιχειρίδα που να πλησιάζει τα όρια του AAMI/IEEE SP10.
+
+Οι συγγραφείς αναφέρουν ότι ένα μοντέλο μόνο με PPG από smartphone camera έφτασε παρόμοια επίδοση με μοντέλο που συνδύαζε ECG και PPG.
+
+Αν αυτά τα αποτελέσματα αναπαραχθούν σε μεγαλύτερα δείγματα, η προσέγγιση θα μπορούσε να ενδιαφέρει εργαλεία ψηφιακής παρακολούθησης και απομακρυσμένης καταγραφής ζωτικών σημείων.
+
+## Σχόλιο
+
+Η εργασία συνδυάζει θεωρητικό πλαίσιο, μαθηματική τεκμηρίωση και πειραματική αξιολόγηση σε ένα ενιαίο σχήμα.
+
+Το βασικό ερώτημα για την επόμενη φάση είναι η απόδοση σε πιο ευρεία κλινικά περιβάλλοντα και σε διαφορετικούς πληθυσμούς, πέρα από τα δεδομένα που χρησιμοποιήθηκαν εδώ.
