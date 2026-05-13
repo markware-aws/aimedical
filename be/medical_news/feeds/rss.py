@@ -19,15 +19,24 @@ ATOM_NS = {"atom": "http://www.w3.org/2005/Atom"}
 
 
 def fetch_rss() -> list[RawArticle]:
-    if not FEEDS:
+    return fetch_labeled_feeds(FEEDS)
+
+
+def fetch_labeled_feeds(feeds: list[dict[str, str]]) -> list[RawArticle]:
+    """Fetch RSS/Atom URLs. Each dict must include ``label`` and ``url`` keys."""
+    if not feeds:
         return []
     out: list[RawArticle] = []
-    for feed in FEEDS:
+    for feed in feeds:
+        label = feed.get("label") or "rss"
+        url = feed.get("url")
+        if not url:
+            continue
         try:
-            xml = _fetch_feed_xml(feed["url"])
-            out.extend(_parse_rss(xml, feed["label"]))
+            xml = _fetch_feed_xml(url)
+            out.extend(_parse_rss(xml, label))
         except Exception as exc:
-            logger.warn("rss feed failed", {"feed": feed["label"], "err": str(exc)})
+            logger.warn("rss feed failed", {"feed": label, "err": str(exc)})
     return out
 
 

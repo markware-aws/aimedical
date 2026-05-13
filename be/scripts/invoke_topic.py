@@ -25,9 +25,16 @@ def main() -> None:
         default="all",
         help="Which source to query. RSS is intentionally omitted for topic runs.",
     )
+    parser.add_argument(
+        "--batch-pr",
+        action="store_true",
+        help="Open one draft PR containing all MDX files from this run (sets env GITHUB_BATCH_PR).",
+    )
     args = parser.parse_args()
 
     load_dotenv()
+    if args.batch_pr:
+        os.environ["GITHUB_BATCH_PR"] = "1"
     if args.max_articles is not None:
         os.environ["MAX_ARTICLES_PER_RUN"] = str(args.max_articles)
     if args.min_score is not None:

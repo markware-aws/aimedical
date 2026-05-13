@@ -31,6 +31,10 @@ class RawArticle(TypedDict):
     published_date: str
     doi: NotRequired[str]
     url: str
+    # Optional pipeline hints (manual / curated batches e.g. disease-advance feeds)
+    featured: NotRequired[bool]
+    category_override: NotRequired[ArticleCategory]
+    bypass_relevance: NotRequired[bool]
 
 
 class RelevanceResult(TypedDict):
