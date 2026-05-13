@@ -58,9 +58,16 @@ Terminology rules:
 - Do not create unnatural phrases such as "ομιλητικός τεχνητός νοημοσύνης βοηθός". Use "conversational AI βοηθός" or "AI βοηθός συνομιλίας", whichever reads more natural.
 - Mix Greek and English deliberately when that is how Greek clinicians/technologists would speak: "conversational AI βοηθός", "LLM αξιολογεί", "smartwatch εκτιμά", "foundation model προβλέπει".
 
+How titleGr relates to descriptionGr (critical):
+- Do NOT derive titleGr from English title wording alone. Decide the story in Greek first.
+- Compose descriptionGr first: a factual 140-160 character SEO blurb stating the core finding in fluent Greek (see field order below—you must mentally settle this before wording titleGr).
+- titleGr MUST express the **same substantive story** as descriptionGr (same central claim + who/what/context), but rewritten as **headline register**: sharper, tighter, noun-verb-forward, max ~90 characters.
+- titleGr MUST **not** be identical to descriptionGr, not a truncation of it, and not a punctuation-only tweak—use distinct wording while staying factually aligned.
+- If descriptionGr reads well and titleGr sounded like a lame translation before, prioritize the factual clarity of descriptionGr when choosing verbs and entities—then distill that into titleGr.
+
 Greek headline rules for titleGr:
-- titleGr is an editorial Greek headline, not a translated paper title.
-- First understand the study, then silently draft 3 Greek headline options and return only the clearest one.
+- titleGr is an editorial Greek headline, not a translated paper title and not English-title mirroring.
+- First understand the study, then silently finalize descriptionGr, then distill 3 Greek headline variants from that description and return only the clearest as titleGr.
 - Prefer natural Greek word order: [tool/model/intervention] + active verb + [main outcome] + [clinical context].
 - Avoid long stacked genitives and noun chains, especially phrases like "σύστημα αυτοματοποιημένου σχεδιασμού ακτινοθεραπείας".
 - Move the clinical context later when that reads better in Greek.
@@ -91,11 +98,11 @@ Bad titleGr:
 Better titleGr:
 "LLMs εντοπίζουν κλινικές ενέργειες μετά την έξοδο από το νοσοκομείο"
 
-Output JSON only with this exact shape:
+Return fields in JSON in this exact key order (so you formulate descriptionGr before tightening titleGr):
 {
-  "titleGr": "Greek editorial headline, max 90 chars, natural Greek word order, not a literal paper-title translation, no clickbait",
+  "descriptionGr": "Greek SEO description, 140-160 chars, factual plain summary of the finding",
+  "titleGr": "Greek editorial headline, max ~90 chars, distilled from descriptionGr facts (distinct wording)",
   "subtitleGr": "Greek subtitle, 1 sentence (≤140 chars), states the main finding neutrally; avoid formulaic 'but' caveats",
-  "descriptionGr": "Greek SEO description, 140-160 chars",
   "tags": ["3-6 lowercase tags in English"],
   "conditions": ["1-4 concise Greek labels for the conditions, patient groups, or concrete study topic; empty array if none"],
   "keyFindings": ["3-5 short Greek bullets, each one fact from the source - no interpretation"],
@@ -126,4 +133,4 @@ Original title:
 Original abstract:
 {article['abstract']}
 
-Write the Greek summary now. First decide what the article means. For titleGr, silently compare 3 possible Greek headlines and choose the one with the most natural Greek word order, clear clinical context, and least noun-stacking. Remember the editorial rules. Return JSON only."""
+Write the Greek summary now. First decide what the article means, then formulate descriptionGr in full, then distill titleGr from that description (distinct wording). Return JSON only with keys in the order specified in the system message (descriptionGr before titleGr)."""

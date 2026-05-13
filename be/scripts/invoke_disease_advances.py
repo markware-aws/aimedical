@@ -1,3 +1,19 @@
+#!/usr/bin/env python3
+"""Manual pipeline run: curated society/disease-news RSS feeds, low-frequency.
+
+Skips relevance scoring (so non-AI stories can pass) and defaults to ``featured: true``
+in MDX unless you pass ``--no-featured``.
+
+Uses ``ADVANCE_FEEDS`` in ``medical_news.feeds.disease_advances`` — expand that list
+with foundation-specific RSS URLs.
+
+Examples:
+
+  PYTHONIOENCODING=utf-8 python scripts/invoke_disease_advances.py --dry-run --max-per-source 3
+
+  PYTHONIOENCODING=utf-8 python scripts/invoke_disease_advances.py --max-articles 5 --batch-pr
+"""
+
 from __future__ import annotations
 
 import argparse
@@ -15,26 +31,30 @@ sys.path.insert(0, str(ROOT))
 
 def main() -> None:
     parser = argparse.ArgumentParser(
-        description="Run the article pipeline for recent RSS articles from the curated sources only."
+        description="Run the article pipeline for curated disease breakthrough / advocacy RSS feeds (manual)."
     )
-    parser.add_argument("--max-per-source", type=int, default=5, help="Maximum raw RSS articles to keep per feed.")
+    parser.add_argument("--max-per-source", type=int, default=3, help="Maximum items to keep per feed URL.")
     parser.add_argument("--max-articles", type=int, help="Override MAX_ARTICLES_PER_RUN for this run.")
-    parser.add_argument("--min-score", type=float, help="Override RELEVANCE_MIN_SCORE for this run.")
     parser.add_argument(
         "--source",
-        choices=["all", "npj-digital-medicine", "lancet-digital-health", "radiology-ai"],
-        default="all",
-        help="Limit to one curated RSS source.",
+        type=str,
+        default="",
+        help="Limit to feeds whose ``label`` in ADVANCE_FEEDS contains this substring (case-insensitive).",
+    )
+    parser.add_argument(
+        "--no-featured",
+        action="store_true",
+        help="Do not set featured: true in generated frontmatter.",
     )
     parser.add_argument(
         "--dry-run",
         action="store_true",
-        help="Only fetch and print recent RSS candidates. Does not run OpenAI, GitHub, or DynamoDB.",
+        help="Fetch and preview only. No OpenAI, GitHub, or DynamoDB.",
     )
     parser.add_argument(
         "--batch-pr",
         action="store_true",
-        help="Open one draft PR containing all MDX files from this run (sets env GITHUB_BATCH_PR).",
+        help="Open one draft PR for all MDX files from this run (sets env GITHUB_BATCH_PR).",
     )
     args = parser.parse_args()
 
@@ -43,25 +63,24 @@ def main() -> None:
         os.environ["GITHUB_BATCH_PR"] = "1"
     if args.max_articles is not None:
         os.environ["MAX_ARTICLES_PER_RUN"] = str(args.max_articles)
-    if args.min_score is not None:
-        os.environ["RELEVANCE_MIN_SCORE"] = str(args.min_score)
 
-    from medical_news.feeds.rss import fetch_rss
+    from medical_news.feeds.disease_advances import fetch_disease_advance_candidates
     from medical_news.handlers.orchestrator import process_articles
     from medical_news.types import RawArticle
     from medical_news.util import logger
 
-    articles = fetch_rss()
-    if args.source != "all":
-        articles = [article for article in articles if _feed_label(article) == args.source]
+    articles = fetch_disease_advance_candidates(featured=not args.no_featured)
+    needle = args.source.strip().lower()
+    if needle:
+        articles = [a for a in articles if needle in _feed_label(a)]
 
     articles = _limit_per_source(_sort_recent_first(articles), args.max_per_source)
     logger.info(
-        "rss fetch complete",
+        "disease advance fetch complete",
         {
-            "source": args.source,
             "maxPerSource": args.max_per_source,
             "articles": len(articles),
+            "featured": not args.no_featured,
             "dryRun": args.dry_run,
         },
     )
@@ -108,6 +127,8 @@ def _preview(articles: list["RawArticle"]) -> list[dict[str, object]]:
                     "date": article["published_date"],
                     "title": article["title"],
                     "url": article["url"],
+                    "featured": article.get("featured", False),
+                    "category_override": article.get("category_override", ""),
                 }
                 for article in items
             ],
