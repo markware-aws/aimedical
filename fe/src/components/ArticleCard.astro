@@ -2,23 +2,34 @@
 import CategoryBadge from "./CategoryBadge.astro";
 import type { Article } from "../lib/articles";
 
-interface Props { article: Article }
-const { article } = Astro.props;
+interface Props {
+  article: Article;
+  compact?: boolean;
+}
+
+const { article, compact = false } = Astro.props;
 const { title, description, date, category } = article.data;
 const slug = article.slug;
 const dateStr = date.toLocaleDateString("el-GR", { year: "numeric", month: "long", day: "numeric" });
 ---
 <a href={`/articles/${slug}`} class="group block no-underline">
-  <article class="card card-hover h-full overflow-hidden">
-    <div class="p-5">
+  <article class:list={["card card-hover h-full overflow-hidden", compact && "shadow-none hover:shadow-card"]}>
+    <div class:list={[compact ? "p-4" : "p-5"]}>
       <div class="mb-2">
         <CategoryBadge category={category} asLink={false} />
       </div>
-      <h3 class="mb-2 text-lg font-semibold leading-snug text-ink dark:text-ink-dark group-hover:text-accent dark:group-hover:text-accent-dark transition-colors">
+      <h3
+        class:list={[
+          "mb-2 font-semibold leading-snug text-ink transition-colors dark:text-ink-dark group-hover:text-accent dark:group-hover:text-accent-dark",
+          compact ? "text-base line-clamp-3" : "text-lg",
+        ]}
+      >
         {title}
       </h3>
       {description && (
-        <p class="mb-4 line-clamp-2 text-sm leading-relaxed text-muted dark:text-muted-dark">{description}</p>
+        <p class:list={["text-sm leading-relaxed text-muted dark:text-muted-dark line-clamp-2", compact ? "mb-3" : "mb-4"]}>
+          {description}
+        </p>
       )}
       <div class="text-xs text-muted dark:text-muted-dark">
         <time datetime={date.toISOString()}>{dateStr}</time>

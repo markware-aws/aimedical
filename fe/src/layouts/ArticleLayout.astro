@@ -43,72 +43,83 @@ const primaryCondition = conditions?.[0];
   ogType="article"
   publishedDate={date}
   article={{ sourceUrl, doi }}
-  containerClass="max-w-3xl"
+  containerClass="max-w-6xl"
 >
-  <article>
-    <header class="mb-8">
-      <CategoryBadge category={category} size="md" />
-      <h1 class="mt-4 text-3xl font-semibold leading-tight tracking-tight md:text-[2.5rem] md:leading-[1.15]">
-        {title}
-      </h1>
-      {subtitle && (
-        <p class="mt-4 text-xl leading-relaxed text-muted dark:text-muted-dark md:text-2xl">{subtitle}</p>
-      )}
-      {originalTitle && (
-        <p class="mt-3 rounded-lg border border-border dark:border-border-dark bg-surface dark:bg-surface-dark px-4 py-3 text-sm leading-relaxed text-muted dark:text-muted-dark">
-          <span class="font-medium text-ink dark:text-ink-dark">Original title:</span> {originalTitle}
-        </p>
-      )}
-      {primaryCondition && (
-        <div class="mt-4 flex flex-wrap items-center gap-2 text-sm">
-          <span class="text-muted dark:text-muted-dark">Αφορά:</span>
-          <span class="rounded-full border border-border dark:border-border-dark bg-surface dark:bg-surface-dark px-3 py-1 text-xs font-medium text-ink dark:text-ink-dark">
-            {primaryCondition}
+  <div
+    class="grid grid-cols-1 gap-12 lg:grid-cols-[minmax(0,1fr)_17.5rem] xl:grid-cols-[minmax(0,1fr)_20rem] lg:items-start lg:gap-10 xl:gap-14"
+  >
+    <article class="min-w-0">
+      <header class="mb-8">
+        <CategoryBadge category={category} size="md" />
+        <h1 class="mt-4 text-3xl font-semibold leading-tight tracking-tight md:text-[2.5rem] md:leading-[1.15]">
+          {title}
+        </h1>
+        {subtitle && (
+          <p class="mt-4 text-xl leading-relaxed text-muted dark:text-muted-dark md:text-2xl">{subtitle}</p>
+        )}
+        {originalTitle && (
+          <p class="mt-3 rounded-lg border border-border dark:border-border-dark bg-surface dark:bg-surface-dark px-4 py-3 text-sm leading-relaxed text-muted dark:text-muted-dark">
+            <span class="font-medium text-ink dark:text-ink-dark">Original title:</span> {originalTitle}
+          </p>
+        )}
+        {primaryCondition && (
+          <div class="mt-4 flex flex-wrap items-center gap-2 text-sm">
+            <span class="text-muted dark:text-muted-dark">Αφορά:</span>
+            <span class="rounded-full border border-border dark:border-border-dark bg-surface dark:bg-surface-dark px-3 py-1 text-xs font-medium text-ink dark:text-ink-dark">
+              {primaryCondition}
+            </span>
+          </div>
+        )}
+        {tags.length > 0 && (
+          <div class="mt-4">
+            <TagChips tags={tags} />
+          </div>
+        )}
+        <div class="mt-5 flex flex-wrap items-center gap-3 text-sm text-muted dark:text-muted-dark">
+          <time datetime={date.toISOString()}>{dateStr}</time>
+          <span aria-hidden="true">·</span>
+          <span class="inline-flex items-center gap-1.5 rounded-full border border-border dark:border-border-dark px-2.5 py-0.5 text-xs">
+            <span class="inline-block h-1.5 w-1.5 rounded-full bg-med" aria-hidden="true" />
+            AI-generated · human-reviewed
           </span>
         </div>
-      )}
-      {tags.length > 0 && (
-        <div class="mt-4">
-          <TagChips tags={tags} />
-        </div>
-      )}
-      <div class="mt-5 flex flex-wrap items-center gap-3 text-sm text-muted dark:text-muted-dark">
-        <time datetime={date.toISOString()}>{dateStr}</time>
-        <span aria-hidden="true">·</span>
-        <span class="inline-flex items-center gap-1.5 rounded-full border border-border dark:border-border-dark px-2.5 py-0.5 text-xs">
-          <span class="inline-block h-1.5 w-1.5 rounded-full bg-med" aria-hidden="true" />
-          AI-generated · human-reviewed
-        </span>
+      </header>
+
+      <figure class="my-8 -mx-4 overflow-hidden rounded-lg md:mx-0">
+        {heroImage ? (
+          <img
+            src={heroImage}
+            alt=""
+            class="aspect-[16/9] w-full object-cover"
+            loading="eager"
+            decoding="async"
+          />
+        ) : (
+          <CategoryVisual category={category} class="aspect-[16/9]" />
+        )}
+      </figure>
+
+      <div class="prose-article">
+        <slot />
       </div>
-    </header>
 
-    <figure class="my-8 -mx-4 overflow-hidden rounded-lg md:mx-0">
-      {heroImage ? (
-        <img
-          src={heroImage}
-          alt=""
-          class="aspect-[16/9] w-full object-cover"
-          loading="eager"
-          decoding="async"
-        />
-      ) : (
-        <CategoryVisual category={category} class="aspect-[16/9]" />
-      )}
-    </figure>
+      <ArticleSections
+        keyFindings={keyFindings}
+        studyLimitations={studyLimitations}
+        clinicalSignificance={clinicalSignificance}
+      />
 
-    <div class="prose-article">
-      <slot />
-    </div>
+      <SourceCitation sourceUrl={sourceUrl} doi={doi} source={source} />
+      <Disclaimer />
+    </article>
 
-    <ArticleSections
-      keyFindings={keyFindings}
-      studyLimitations={studyLimitations}
-      clinicalSignificance={clinicalSignificance}
-    />
-
-    <SourceCitation sourceUrl={sourceUrl} doi={doi} source={source} />
-    <Disclaimer />
-
-    <RelatedArticles articles={related} category={category} />
-  </article>
+    <aside
+      class="min-w-0 border-t border-border pt-10 dark:border-border-dark lg:border-l lg:border-t-0 lg:pl-8 lg:pt-0 xl:pl-10"
+      aria-label="Σχετικά άρθρα"
+    >
+      <div class="lg:sticky lg:top-28">
+        <RelatedArticles articles={related} category={category} variant="sidebar" />
+      </div>
+    </aside>
+  </div>
 </BaseLayout>

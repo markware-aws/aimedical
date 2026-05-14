@@ -7,34 +7,63 @@ interface Props {
   articles: Article[];
   category?: string;
   heading?: string;
+  variant?: "default" | "sidebar";
 }
 
-const { articles, category, heading } = Astro.props;
+const { articles, category, heading, variant = "default" } = Astro.props;
+const isSidebar = variant === "sidebar";
 const label = category ? categoryLabel(category) : undefined;
 const title = heading ?? (label ? `Περισσότερα στην κατηγορία ${label}` : "Σχετικά άρθρα");
 ---
 {articles.length > 0 && (
-  <section class="mt-16 border-t border-border dark:border-border-dark pt-10" aria-labelledby="related-articles-heading">
-    <div class="mb-6 flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
+  <section
+    class:list={[
+      !isSidebar && "mt-16 border-t border-border pt-10 dark:border-border-dark",
+      isSidebar && "",
+    ]}
+    aria-labelledby="related-articles-heading"
+  >
+    <div class:list={["mb-6 flex gap-3", isSidebar ? "flex-row flex-wrap items-start justify-between gap-x-4" : "flex-col sm:flex-row sm:items-end sm:justify-between"]}>
       <div>
-        <p class="mb-2 text-xs font-semibold uppercase tracking-[0.2em] text-accent dark:text-accent-dark">
-          Συνέχεια ανάγνωσης
-        </p>
-        <h2 id="related-articles-heading" class="text-2xl font-semibold tracking-tight text-ink dark:text-ink-dark">
+        {!isSidebar && (
+          <p class="mb-2 text-xs font-semibold uppercase tracking-[0.2em] text-accent dark:text-accent-dark">
+            Συνέχεια ανάγνωσης
+          </p>
+        )}
+        {isSidebar && (
+          <p class="mb-2 text-xs font-semibold uppercase tracking-[0.2em] text-accent dark:text-accent-dark">
+            Σχετικά
+          </p>
+        )}
+        <h2
+          id="related-articles-heading"
+          class:list={[
+            "font-semibold tracking-tight text-ink dark:text-ink-dark",
+            isSidebar ? "text-lg leading-snug xl:text-xl" : "text-2xl",
+          ]}
+        >
           {title}
         </h2>
-        <p class="mt-2 max-w-xl text-sm leading-relaxed text-muted dark:text-muted-dark">
-          Άρθρα από την ίδια θεματική ενότητα, ώστε να δείτε το εύρημα μέσα σε ευρύτερο κλινικό πλαίσιο.
-        </p>
+        {!isSidebar && (
+          <p class="mt-2 max-w-xl text-sm leading-relaxed text-muted dark:text-muted-dark">
+            Άρθρα από την ίδια θεματική ενότητα, ώστε να δείτε το εύρημα μέσα σε ευρύτερο κλινικό πλαίσιο.
+          </p>
+        )}
       </div>
       {category && (
-        <a href={`/category/${category}`} class="text-sm font-medium no-underline text-accent dark:text-accent-dark hover:underline">
+        <a
+          href={`/category/${category}`}
+          class:list={[
+            "font-medium no-underline text-accent dark:text-accent-dark hover:underline shrink-0",
+            isSidebar ? "text-xs" : "text-sm",
+          ]}
+        >
           Όλα τα άρθρα →
         </a>
       )}
     </div>
-    <div class="grid gap-5 sm:grid-cols-2">
-      {articles.map((a) => <ArticleCard article={a} />)}
+    <div class:list={["grid gap-4", !isSidebar && "gap-5 sm:grid-cols-2", isSidebar && "gap-4"]}>
+      {articles.map((a) => <ArticleCard article={a} compact={isSidebar} />)}
     </div>
   </section>
 )}

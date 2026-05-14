@@ -3,7 +3,10 @@ import { getCollection, type CollectionEntry } from "astro:content";
 export type Article = CollectionEntry<"articles">;
 
 export async function getPublishedArticles(): Promise<Article[]> {
-  const all = await getCollection("articles", ({ data }) => data.published === true);
+  const all = await getCollection(
+    "articles",
+    ({ data }) => data.published === true
+  );
   return all.sort((a, b) => b.data.date.getTime() - a.data.date.getTime());
 }
 
@@ -26,7 +29,10 @@ export async function getCategoryCounts(): Promise<Map<string, number>> {
   const all = await getPublishedArticles();
   const counts = new Map<string, number>();
   for (const article of all) {
-    counts.set(article.data.category, (counts.get(article.data.category) ?? 0) + 1);
+    counts.set(
+      article.data.category,
+      (counts.get(article.data.category) ?? 0) + 1
+    );
   }
   return counts;
 }
@@ -39,9 +45,14 @@ export function tagSlug(tag: string): string {
     .replace(/^-+|-+$/g, "");
 }
 
-export async function getTags(): Promise<{ tag: string; slug: string; count: number }[]> {
+export async function getTags(): Promise<
+  { tag: string; slug: string; count: number }[]
+> {
   const all = await getPublishedArticles();
-  const counts = new Map<string, { tag: string; slug: string; count: number }>();
+  const counts = new Map<
+    string,
+    { tag: string; slug: string; count: number }
+  >();
 
   for (const article of all) {
     for (const tag of article.data.tags) {
@@ -53,17 +64,27 @@ export async function getTags(): Promise<{ tag: string; slug: string; count: num
     }
   }
 
-  return [...counts.values()].sort((a, b) => b.count - a.count || a.tag.localeCompare(b.tag));
+  return [...counts.values()].sort(
+    (a, b) => b.count - a.count || a.tag.localeCompare(b.tag)
+  );
 }
 
 export async function getByTag(slug: string): Promise<Article[]> {
   const all = await getPublishedArticles();
-  return all.filter((article) => article.data.tags.some((tag) => tagSlug(tag) === slug));
+  return all.filter((article) =>
+    article.data.tags.some((tag) => tagSlug(tag) === slug)
+  );
 }
 
-export async function getRelated(article: Article, limit = 3): Promise<Article[]> {
+export async function getRelated(
+  article: Article,
+  limit = 4
+): Promise<Article[]> {
   const all = await getPublishedArticles();
   return all
-    .filter((a) => a.slug !== article.slug && a.data.category === article.data.category)
+    .filter(
+      (a) =>
+        a.slug !== article.slug && a.data.category === article.data.category
+    )
     .slice(0, limit);
 }
