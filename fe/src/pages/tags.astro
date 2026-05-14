@@ -7,7 +7,7 @@ const tags = await getTags();
 <BaseLayout
   title="Tags"
   description="Browse AI medical news articles by topic tags."
-  canonicalPath="/tags"
+  canonicalPath="/tags/"
 >
   <section class="mb-8 border-b border-border dark:border-border-dark pb-6">
     <p class="text-xs font-semibold uppercase tracking-[0.2em] text-accent dark:text-accent-dark">
@@ -27,7 +27,7 @@ const tags = await getTags();
     <div class="flex flex-wrap gap-3">
       {tags.map(({ tag, slug, count }) => (
         <a
-          href={`/tag/${slug}`}
+          href={`/tag/${slug}/`}
           class="group rounded-full border border-border dark:border-border-dark bg-surface dark:bg-surface-dark px-4 py-2 text-sm font-medium text-ink dark:text-ink-dark no-underline transition-colors hover:border-accent/40 hover:text-accent dark:hover:border-accent-dark/40 dark:hover:text-accent-dark"
         >
           #{tag}

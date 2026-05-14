@@ -24,7 +24,7 @@ const { articles, tag, slug } = Astro.props;
 <BaseLayout
   title={`#${tag} · Tags`}
   description={`Articles tagged with ${tag}.`}
-  canonicalPath={`/tag/${slug}`}
+  canonicalPath={`/tag/${slug}/`}
 >
   <section class="mb-8 border-b border-border dark:border-border-dark pb-6">
     <p class="text-xs font-semibold uppercase tracking-[0.2em] text-accent dark:text-accent-dark">

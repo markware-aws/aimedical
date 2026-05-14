@@ -8,6 +8,7 @@ const SITE = process.env.SITE_URL ?? "https://aimedical.gr";
 export default defineConfig({
   site: SITE,
   output: "static",
+  trailingSlash: "always",
   integrations: [mdx(), tailwind(), sitemap()],
   build: { format: "directory" },
   vite: { ssr: { noExternal: ["@astrojs/rss"] } },

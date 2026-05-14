@@ -8,7 +8,7 @@ const { title, description, date, category } = article.data;
 const slug = article.slug;
 const dateStr = date.toLocaleDateString("el-GR", { year: "numeric", month: "long", day: "numeric" });
 ---
-<a href={`/articles/${slug}`} class="group block no-underline">
+<a href={`/articles/${slug}/`} class="group block no-underline">
   <article class="card card-hover h-full overflow-hidden">
     <div class="p-5">
       <div class="mb-2">

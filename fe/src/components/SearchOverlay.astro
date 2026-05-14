@@ -15,7 +15,7 @@ const searchIndex = articles.map((article) => {
     tags,
     conditions: conditions ?? [],
     date: date.toLocaleDateString("el-GR", { year: "numeric", month: "long", day: "numeric" }),
-    url: `/articles/${article.slug}`,
+    url: `/articles/${article.slug}/`,
     searchText: [title, originalTitle, description, subtitle, category, categoryGr, ...tags, ...(conditions ?? [])]
       .filter(Boolean)
       .join(" "),
@@ -67,11 +67,11 @@ const searchIndex = articles.map((article) => {
         Πληκτρολογήστε έναν όρο, μια πάθηση, κατηγορία ή tag.
       </div>
       <div id="search-no-results" class="hidden px-4 py-6 text-sm text-muted dark:text-muted-dark">
-        Δεν βρέθηκαν άρθρα. Δοκιμάστε πιο γενικό όρο ή δείτε όλες τις <a href="/categories">κατηγορίες</a>.
+        Δεν βρέθηκαν άρθρα. Δοκιμάστε πιο γενικό όρο ή δείτε όλες τις <a href="/categories/">κατηγορίες</a>.
       </div>
       <div id="search-results" class="divide-y divide-border dark:divide-border-dark"></div>
       <div class="border-t border-border dark:border-border-dark bg-surface/70 dark:bg-surface-dark/70 px-4 py-3 text-xs text-muted dark:text-muted-dark">
-        <a href="/search" class="font-medium">Άνοιγμα πλήρους αναζήτησης</a>
+        <a href="/search/" class="font-medium">Άνοιγμα πλήρους αναζήτησης</a>
         <span class="mx-2" aria-hidden="true">·</span>
         <span>Ctrl/⌘ K</span>
       </div>

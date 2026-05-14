@@ -44,7 +44,7 @@ const hasMultiple = articles.length > 1;
       const dateStr = date.toLocaleDateString("el-GR", { year: "numeric", month: "long", day: "numeric" });
       return (
         <a
-          href={`/articles/${article.slug}`}
+          href={`/articles/${article.slug}/`}
           class={`featured-slide group block no-underline ${index === 0 ? "" : "hidden"}`}
           data-featured-slide
           aria-hidden={index === 0 ? "false" : "true"}
