@@ -14,7 +14,7 @@ const emptyCategories = categories.filter((category) => category.count === 0);
 <BaseLayout
   title="Κατηγορίες"
   description="Εξερευνήστε άρθρα για την τεχνητή νοημοσύνη στην ιατρική ανά κλινικό πεδίο και ερευνητική θεματική."
-  canonicalPath="/categories"
+  canonicalPath="/categories/"
 >
   <section class="mb-8 border-b border-border dark:border-border-dark pb-6">
     <p class="text-xs font-semibold uppercase tracking-[0.2em] text-accent dark:text-accent-dark">
@@ -30,7 +30,7 @@ const emptyCategories = categories.filter((category) => category.count === 0);
     <h2 class="mb-4 text-xl font-semibold tracking-tight">Με διαθέσιμα άρθρα</h2>
     <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
       {activeCategories.map((category) => (
-        <a href={`/category/${category.slug}`} class="card card-hover group flex min-h-32 flex-col justify-between p-5 no-underline">
+        <a href={`/category/${category.slug}/`} class="card card-hover group flex min-h-32 flex-col justify-between p-5 no-underline">
           <div>
             <p class="mb-3 text-xs font-semibold uppercase tracking-[0.18em] text-accent dark:text-accent-dark">
               {category.count} {category.count === 1 ? "άρθρο" : "άρθρα"}
@@ -55,7 +55,7 @@ const emptyCategories = categories.filter((category) => category.count === 0);
       <div class="flex flex-wrap gap-2">
         {emptyCategories.map((category) => (
           <a
-            href={`/category/${category.slug}`}
+            href={`/category/${category.slug}/`}
             class="rounded-full border border-border dark:border-border-dark px-3 py-1 text-sm text-muted dark:text-muted-dark no-underline hover:border-accent/40 hover:text-accent dark:hover:border-accent-dark/40 dark:hover:text-accent-dark"
           >
             {category.labelGr}

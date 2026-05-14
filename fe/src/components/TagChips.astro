@@ -16,7 +16,7 @@ const normalized = tags
     <span class="text-muted dark:text-muted-dark">{label}</span>
     {normalized.map(({ tag, slug }) => (
       <a
-        href={`/tag/${slug}`}
+        href={`/tag/${slug}/`}
         class="rounded-full border border-border dark:border-border-dark bg-bg dark:bg-bg-dark px-3 py-1 text-xs font-medium text-muted dark:text-muted-dark no-underline transition-colors hover:border-accent/40 hover:text-accent dark:hover:border-accent-dark/40 dark:hover:text-accent-dark"
       >
         #{tag}
