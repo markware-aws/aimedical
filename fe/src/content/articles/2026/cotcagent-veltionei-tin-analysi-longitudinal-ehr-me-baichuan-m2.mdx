@@ -1,0 +1,47 @@
+---
+title: "COTCAgent βελτιώνει την ανάλυση longitudinal EHR με Baichuan-M2"
+originalTitle: "COTCAgent: Preventive Consultation via Probabilistic Chain-of-Thought Completion"
+subtitle: "Το framework αποδίδει καλύτερα από άλλα medical agents και LLMs σε δύο benchmarks για longitudinal EHR."
+date: "2026-05-14"
+description: "Το COTCAgent, ένα hierarchical reasoning framework για longitudinal EHR, βελτιώνει την ανάλυση κινδύνου με Baichuan-M2 και ξεπερνά LLMs σε δύο benchmarks."
+category: "llms"
+tags:
+  - "llm"
+  - "ehr"
+  - "clinical-ai"
+  - "medical-agents"
+  - "longitudinal-data"
+keyFindings:
+  - "Το COTCAgent είναι ένα hierarchical reasoning framework για longitudinal electronic health records."
+  - "Χρησιμοποιεί τρία βασικά μέρη: Temporal-Statistics Adapter, Chain-of-Thought Completion και bounded completion."
+  - "Το σύστημα συνδυάζει στατιστικό υπολογισμό, αντιστοίχιση χαρακτηριστικών και παραγωγή γλώσσας."
+  - "Με Baichuan-M2 πέτυχε 90,47% Top-1 accuracy στο self-built dataset και 70,41% στο HealthBench."
+  - "Στο άρθρο αναφέρεται ότι ξεπέρασε υπάρχοντα medical agents και mainstream LLMs στα συγκεκριμένα benchmarks."
+conditions:
+  - "ηλεκτρονικός ιατρικός φάκελος"
+  - "κλινική λήψη αποφάσεων"
+studyLimitations: "Πρόκειται για προδημοσίευση στο arXiv και όχι για peer-reviewed εργασία. Η αξιολόγηση έγινε σε self-built dataset και σε ένα benchmark, οπότε η γενίκευση σε άλλα νοσοκομειακά περιβάλλοντα ή πληθυσμούς δεν είναι δεδομένη."
+clinicalSignificance: "Η προσέγγιση δείχνει πώς ένα LLM-based σύστημα μπορεί να οργανώνει καλύτερα τη λογική πάνω σε χρονοσειρές από ηλεκτρονικούς φακέλους. Αν επιβεβαιωθεί σε ανεξάρτητες αξιολογήσεις, θα μπορούσε να στηρίξει εργαλεία κλινικής υποβοήθησης για ανασκόπηση μακροχρόνιων δεδομένων."
+sourceUrl: "http://arxiv.org/abs/2605.15016v1"
+source: "arxiv"
+published: false
+generated: true
+featured: false
+---
+## Τι συνέβη
+
+Οι συγγραφείς παρουσίασαν το COTCAgent, ένα πλαίσιο συλλογισμού για longitudinal electronic health records (EHR). Στόχος του είναι να χειρίζεται καλύτερα τα χρονικά μοτίβα και τα ποσοτικά στοιχεία που εμφανίζονται σε μακροχρόνια κλινικά δεδομένα.
+
+Το σύστημα χωρίζει τη δουλειά σε τρία μέρη: μετατροπή αναλυτικών σχεδίων σε εκτελέσιμο κώδικα, αξιολόγηση κινδύνου με γνώση για σύμπτωμα-τάση-νόσο και δομημένη συλλογή στοιχείων μέσω ελεγχόμενων ερωτήσεων.
+
+Στην αξιολόγηση, το COTCAgent με Baichuan-M2 ανέφερε καλύτερη επίδοση από άλλα medical agents και από ευρέως χρησιμοποιούμενα LLMs στα benchmarks που δοκιμάστηκαν.
+
+## Γιατί έχει σημασία
+
+Η ανάλυση longitudinal EHR είναι δύσκολη, επειδή τα δεδομένα δεν είναι πάντα ομοιόμορφα στον χρόνο και συχνά λείπουν ετικέτες. Ένα σύστημα που οργανώνει πιο πειθαρχημένα τη συλλογιστική μπορεί να βοηθήσει στην επεξεργασία τέτοιων φακέλων.
+
+Η εργασία δείχνει επίσης μια σχεδιαστική κατεύθυνση όπου ο στατιστικός υπολογισμός, η αντιστοίχιση γνώσης και η γλωσσική παραγωγή δεν γίνονται όλα μαζί στο ίδιο βήμα. Αυτό μπορεί να κάνει την ανάλυση πιο ελεγχόμενη σε σύνθετα κλινικά δεδομένα.
+
+## Σχόλιο
+
+Το άρθρο είναι προδημοσίευση και τα αποτελέσματα προέρχονται από συγκεκριμένα benchmarks. Η κλινική χρησιμότητα θα εξαρτηθεί από το πώς θα αποδώσει το σύστημα σε ανεξάρτητα δεδομένα και σε πραγματικές ροές εργασίας.
