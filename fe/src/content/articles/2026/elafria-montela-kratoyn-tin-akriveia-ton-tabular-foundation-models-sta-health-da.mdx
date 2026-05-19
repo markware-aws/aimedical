@@ -1,0 +1,49 @@
+---
+title: "Ελαφριά μοντέλα κρατούν την ακρίβεια των tabular foundation models στα health data"
+originalTitle: "Distilling Tabular Foundation Models for Structured Health Data"
+subtitle: "Η αποστακτοποίηση με έλεγχο διαρροής κράτησε την AUC κοντά στον δάσκαλο και μείωσε πολύ το κόστος εκτέλεσης."
+date: "2026-05-18"
+description: "Σε 19 υγειονομικά datasets, η αποστακτοποίηση tabular foundation models σε ελαφριά μοντέλα διατήρησε τουλάχιστον το 90% της AUC και έτρεξε 26× γρηγορότερα."
+category: "digital-health"
+tags:
+  - "machine learning"
+  - "foundation model"
+  - "knowledge distillation"
+  - "health data"
+  - "tabular data"
+keyFindings:
+  - "Η μελέτη εξέτασε 19 healthcare datasets, 6 tabular foundation model teachers και 4 οικογένειες student μοντέλων."
+  - "Τα distilled students διατήρησαν τουλάχιστον το 90% της AUC των teachers."
+  - "Σε ορισμένες περιπτώσεις τα student μοντέλα ξεπέρασαν τους teachers."
+  - "Η εκτέλεση σε CPU ήταν τουλάχιστον 26 φορές ταχύτερη."
+  - "Η calibration και η fairness παρέμειναν σε επίπεδα χρήσιμα για εφαρμογές υγείας."
+conditions:
+  - "υγειονομικά δεδομένα"
+  - "προγνωστικά μοντέλα"
+  - "structured health data"
+studyLimitations: "Πρόκειται για preprint στο arXiv και όχι για peer-reviewed δημοσίευση. Τα ευρήματα βασίζονται σε συγκριτική αξιολόγηση σε επιλεγμένα datasets και μοντέλα, όχι σε κλινική μελέτη εφαρμογής."
+clinicalSignificance: "Αν επιβεβαιωθεί, η προσέγγιση μπορεί να επιτρέψει τη χρήση μοντέλων υψηλής απόδοσης σε περιβάλλοντα με περιορισμένους υπολογιστικούς πόρους, όπως νοσοκομειακά συστήματα ή εργαλεία υποστήριξης αποφάσεων. Η διατήρηση της calibration και της fairness είναι ιδιαίτερα σημαντική για ιατρικές εφαρμογές."
+sourceUrl: "http://arxiv.org/abs/2605.18702v1"
+source: "arxiv"
+published: true
+generated: true
+featured: false
+---
+## Τι συνέβη
+Οι συγγραφείς εξέτασαν αν η συμπεριφορά tabular foundation models μπορεί να μεταφερθεί σε πιο ελαφριά μοντέλα με knowledge distillation.
+
+Για να μειώσουν τον κίνδυνο context leakage, χρησιμοποίησαν stratified out-of-fold teacher labeling αντί για απλή αποστακτοποίηση.
+
+Η αξιολόγηση έγινε σε 19 healthcare datasets, με 6 teachers, 4 οικογένειες student μοντέλων και πολλαπλά multi-teacher ensembles.
+
+## Γιατί έχει σημασία
+Το βασικό ερώτημα είναι αν μοντέλα με υψηλή υπολογιστική απαίτηση μπορούν να «συμπυκνωθούν» σε πιο πρακτικές εκδόσεις χωρίς μεγάλη απώλεια απόδοσης.
+
+Σε αυτό το πλαίσιο, η μελέτη δείχνει ότι η αποστακτοποίηση μπορεί να δώσει προβλέψεις κοντά σε εκείνες των πιο βαριών μοντέλων, με πολύ μικρότερο κόστος εκτέλεσης.
+
+Οι συγγραφείς αναφέρουν επίσης ότι η multi-teacher προσέγγιση δεν βελτίωνε σταθερά τα αποτελέσματα σε σχέση με τον καλύτερο μεμονωμένο teacher.
+
+## Σχόλιο
+Η εργασία αφορά structured health data και όχι άμεση κλινική εφαρμογή σε ασθενείς.
+
+Το ενδιαφέρον της είναι κυρίως μεθοδολογικό: δείχνει έναν τρόπο να γίνουν τα foundation models πιο εφαρμόσιμα σε περιβάλλοντα όπου η ταχύτητα και οι πόροι έχουν σημασία.
