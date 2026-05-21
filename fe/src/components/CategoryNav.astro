@@ -6,7 +6,7 @@ const categoriesActive = current.startsWith("/categories");
 ---
 <nav aria-label="Κατηγορίες" class="-mx-2 flex flex-wrap gap-1 text-sm">
   {visible.map((c) => {
-    const href = `/category/${c.slug}`;
+    const href = `/category/${c.slug}/`;
     const active = current.startsWith(href);
     return (
       <a
