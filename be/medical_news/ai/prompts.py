@@ -123,6 +123,20 @@ Abstract:
 def generator_user_prompt(article: RawArticle) -> str:
     doi = f"DOI: {article['doi']}\n" if article.get("doi") else ""
     authors = ", ".join(article["authors"]) or "n/a"
+
+    regulator_block = ""
+    if article["source"] == "fda":
+        regulator_block = """
+
+Regulatory source (FDA): This is Drugs@FDA / openFDA structured metadata—not a randomized trial manuscript.
+Use the FDA SPL INDICATIONS excerpt in the abstract (when provided) together with Drugs@FDA fields.
+For keyFindings, cite only identifiers, sponsor, formulations, URLs, approval dates—and add 1 short Greek bullet stating who the FDA label says the drug treats (population + disease), verbatim to the excerpt.
+limitations (Greek) must clarify that dosing, contraindications, and efficacy/safety detail live in prescribing information—not this snapshot—and forbid inventing percentages or trial outcomes absent from cited text.
+clinicalSignificance stays policy/access oriented (no dosing or treatment directives).
+
+Formatting (FDA): Structure titleGr as `<Greek indication phrase faithful to SPL excerpt wording> - Έγκριση <BRAND> (<INNs if concise>) από τον FDA` using spaces around "-" between clauses.
+english tags MUST open with ONE lowercase literal English disease/condition phrase anchored in SPL excerpt wording (keep FDA abbreviations exactly when present—e.g. "thymidine kinase 2 deficiency"); afterward add logistical tags (`fda`, lowercase molecule strings). When excerpt lacks indications, omit the forced disease-leading tag and say so succinctly in subtitleGr."""
+
     return f"""Original source: {article['source']}
 URL: {article['url']}
 {doi}Authors: {authors}
@@ -131,6 +145,6 @@ Original title:
 {article['title']}
 
 Original abstract:
-{article['abstract']}
+{article['abstract']}{regulator_block}
 
 Write the Greek summary now. First decide what the article means, then formulate descriptionGr in full, then distill titleGr from that description (distinct wording). Return JSON only with keys in the order specified in the system message (descriptionGr before titleGr)."""
