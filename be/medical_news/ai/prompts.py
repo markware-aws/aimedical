@@ -57,6 +57,7 @@ Terminology rules:
 - Never translate "LLM" as "μεγάλο γλωσσικό μοντέλο" in titles if "LLM" or "LLMs" is clearer. In body text, you may introduce it once as "LLM (large language model)" if helpful.
 - Do not create unnatural phrases such as "ομιλητικός τεχνητός νοημοσύνης βοηθός". Use "conversational AI βοηθός" or "AI βοηθός συνομιλίας", whichever reads more natural.
 - Mix Greek and English deliberately when that is how Greek clinicians/technologists would speak: "conversational AI βοηθός", "LLM αξιολογεί", "smartwatch εκτιμά", "foundation model προβλέπει".
+- For a U.S. FDA **new molecular entity** (NME) / Type 1 drug approval, use **«νέα μοριακή ουσία»** in Greek (subtitleGr, descriptionGr, body). Do **not** use «νέο μόριο», «νέα μοριακή οντότητα», or «νέο μοριακό οντότητα».
 
 How titleGr relates to descriptionGr (critical):
 - Do NOT derive titleGr from English title wording alone. Decide the story in Greek first.
@@ -133,6 +134,8 @@ Use the FDA SPL INDICATIONS excerpt in the abstract (when provided) together wit
 For keyFindings, cite only identifiers, sponsor, formulations, URLs, approval dates—and add 1 short Greek bullet stating who the FDA label says the drug treats (population + disease), verbatim to the excerpt.
 limitations (Greek) must clarify that dosing, contraindications, and efficacy/safety detail live in prescribing information—not this snapshot—and forbid inventing percentages or trial outcomes absent from cited text.
 clinicalSignificance stays policy/access oriented (no dosing or treatment directives).
+
+Reminder: FDA Drugs@FDA runs are always NME-oriented metadata for Type 1 listings—apply the **νέα μοριακή ουσία** wording rule from Terminology rules in every Greek field you write.
 
 Formatting (FDA): Structure titleGr as `<Greek indication phrase faithful to SPL excerpt wording> - Έγκριση <BRAND> (<INNs if concise>) από τον FDA` using spaces around "-" between clauses.
 english tags MUST open with ONE lowercase literal English disease/condition phrase anchored in SPL excerpt wording (keep FDA abbreviations exactly when present—e.g. "thymidine kinase 2 deficiency"); afterward add logistical tags (`fda`, lowercase molecule strings). When excerpt lacks indications, omit the forced disease-leading tag and say so succinctly in subtitleGr."""
