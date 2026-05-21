@@ -28,7 +28,7 @@ const articles = defineCollection({
     heroImage: z.string().optional(),
     sourceUrl: z.string().url(),
     doi: z.string().optional(),
-    source: z.enum(["pubmed", "arxiv", "rss"]).optional(),
+    source: z.enum(["pubmed", "arxiv", "rss", "fda"]).optional(),
     conditions: z.array(z.string()).optional(),
     keyFindings: z.array(z.string()).optional(),
     studyLimitations: z.string().optional(),

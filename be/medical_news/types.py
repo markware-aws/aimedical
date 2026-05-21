@@ -3,7 +3,7 @@ from __future__ import annotations
 from typing import Literal, NotRequired, TypedDict
 
 
-FeedSource = Literal["pubmed", "arxiv", "rss"]
+FeedSource = Literal["pubmed", "arxiv", "rss", "fda"]
 ArticleCategory = Literal[
     "oncology",
     "cardiology",

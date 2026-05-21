@@ -72,9 +72,15 @@ def process_articles(articles: list[RawArticle]) -> RunSummary:
 
             mdx = build_mdx(article, greek, category)
             if article.get("bypass_relevance"):
-                bypass_lines = [
-                    "**Curated disease/advance feeds:** relevance scoring was skipped for this batch.",
-                ]
+                bypass_lines = []
+                if article.get("source") == "fda":
+                    bypass_lines.append(
+                        "**FDA Drugs@FDA (openFDA):** relevance scoring was skipped; summarize regulatory approvals metadata faithfully. Direct readers to the official label and prescribing information for efficacy/safety."
+                    )
+                else:
+                    bypass_lines.append(
+                        "**Curated disease/advance feeds:** relevance scoring was skipped for this batch.",
+                    )
                 if article.get("featured"):
                     bypass_lines.append(
                         "**Auto-feature:** `featured: true` was set — clear it if the story does not merit the homepage carousel."
