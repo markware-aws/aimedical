@@ -1,27 +1,7 @@
 ---
-import { categoryLabel } from "../consts";
-import { getPublishedArticles, getPublishedDate } from "../lib/articles";
+import { getSearchIndex } from "../lib/search-index";
 
-const articles = await getPublishedArticles();
-const searchIndex = articles.map((article) => {
-  const { title, originalTitle, description, subtitle, category, tags, conditions } = article.data;
-  const publishedDate = getPublishedDate(article);
-  const categoryGr = categoryLabel(category);
-  return {
-    title,
-    originalTitle: originalTitle ?? "",
-    description: description ?? subtitle ?? "",
-    category,
-    categoryGr,
-    tags,
-    conditions: conditions ?? [],
-    date: publishedDate.toLocaleDateString("el-GR", { year: "numeric", month: "long", day: "numeric" }),
-    url: `/articles/${article.slug}/`,
-    searchText: [title, originalTitle, description, subtitle, category, categoryGr, ...tags, ...(conditions ?? [])]
-      .filter(Boolean)
-      .join(" "),
-  };
-});
+const searchIndex = await getSearchIndex();
 ---
 <button
   type="button"
