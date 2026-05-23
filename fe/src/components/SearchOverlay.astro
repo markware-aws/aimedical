@@ -1,10 +1,11 @@
 ---
 import { categoryLabel } from "../consts";
-import { getPublishedArticles } from "../lib/articles";
+import { getPublishedArticles, getPublishedDate } from "../lib/articles";
 
 const articles = await getPublishedArticles();
 const searchIndex = articles.map((article) => {
-  const { title, originalTitle, description, subtitle, category, tags, conditions, date } = article.data;
+  const { title, originalTitle, description, subtitle, category, tags, conditions } = article.data;
+  const publishedDate = getPublishedDate(article);
   const categoryGr = categoryLabel(category);
   return {
     title,
@@ -14,7 +15,7 @@ const searchIndex = articles.map((article) => {
     categoryGr,
     tags,
     conditions: conditions ?? [],
-    date: date.toLocaleDateString("el-GR", { year: "numeric", month: "long", day: "numeric" }),
+    date: publishedDate.toLocaleDateString("el-GR", { year: "numeric", month: "long", day: "numeric" }),
     url: `/articles/${article.slug}/`,
     searchText: [title, originalTitle, description, subtitle, category, categoryGr, ...tags, ...(conditions ?? [])]
       .filter(Boolean)

@@ -1,7 +1,7 @@
 ---
 import CategoryBadge from "./CategoryBadge.astro";
 import CategoryVisual from "./CategoryVisual.astro";
-import type { Article } from "../lib/articles";
+import { getPublishedDate, type Article } from "../lib/articles";
 
 interface Props {
   articles: Article[];
@@ -40,8 +40,9 @@ const hasMultiple = articles.length > 1;
 
   <div class="relative overflow-hidden rounded-xl border border-border dark:border-border-dark bg-surface dark:bg-surface-dark shadow-card">
     {articles.map((article, index) => {
-      const { title, subtitle, description, date, category, heroImage } = article.data;
-      const dateStr = date.toLocaleDateString("el-GR", { year: "numeric", month: "long", day: "numeric" });
+      const { title, subtitle, description, category, heroImage } = article.data;
+      const publishedDate = getPublishedDate(article);
+      const dateStr = publishedDate.toLocaleDateString("el-GR", { year: "numeric", month: "long", day: "numeric" });
       return (
         <a
           href={`/articles/${article.slug}/`}
@@ -76,7 +77,7 @@ const hasMultiple = articles.length > 1;
                 description && <p class="mb-3 line-clamp-3 text-base leading-relaxed text-muted dark:text-muted-dark">{description}</p>
               )}
               <div class="mt-2 text-xs uppercase tracking-wider text-muted dark:text-muted-dark">
-                <time datetime={date.toISOString()}>{dateStr}</time>
+                <time datetime={publishedDate.toISOString()}>{dateStr}</time>
               </div>
             </div>
           </article>

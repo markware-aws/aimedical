@@ -2,12 +2,19 @@ import { getCollection, type CollectionEntry } from "astro:content";
 
 export type Article = CollectionEntry<"articles">;
 
+/** Site publish date for sort order and listings; falls back to source `date`. */
+export function getPublishedDate(article: Article): Date {
+  return article.data.publishedAt ?? article.data.date;
+}
+
 export async function getPublishedArticles(): Promise<Article[]> {
   const all = await getCollection(
     "articles",
     ({ data }) => data.published === true
   );
-  return all.sort((a, b) => b.data.date.getTime() - a.data.date.getTime());
+  return all.sort(
+    (a, b) => getPublishedDate(b).getTime() - getPublishedDate(a).getTime()
+  );
 }
 
 export async function getFeatured(): Promise<Article | undefined> {

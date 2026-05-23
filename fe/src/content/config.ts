@@ -7,6 +7,7 @@ const articles = defineCollection({
     originalTitle: z.string().optional(),
     subtitle: z.string().optional(),
     date: z.coerce.date(),
+    publishedAt: z.coerce.date().optional(),
     description: z.string().default(""),
     category: z.enum([
       "oncology",

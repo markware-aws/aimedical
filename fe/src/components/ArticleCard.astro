@@ -1,12 +1,13 @@
 ---
 import CategoryBadge from "./CategoryBadge.astro";
-import type { Article } from "../lib/articles";
+import { getPublishedDate, type Article } from "../lib/articles";
 
 interface Props { article: Article }
 const { article } = Astro.props;
-const { title, description, date, category } = article.data;
+const { title, description, category } = article.data;
 const slug = article.slug;
-const dateStr = date.toLocaleDateString("el-GR", { year: "numeric", month: "long", day: "numeric" });
+const publishedDate = getPublishedDate(article);
+const dateStr = publishedDate.toLocaleDateString("el-GR", { year: "numeric", month: "long", day: "numeric" });
 ---
 <a href={`/articles/${slug}/`} class="group block no-underline">
   <article class="card card-hover h-full overflow-hidden">
@@ -21,7 +22,7 @@ const dateStr = date.toLocaleDateString("el-GR", { year: "numeric", month: "long
         <p class="mb-4 line-clamp-2 text-sm leading-relaxed text-muted dark:text-muted-dark">{description}</p>
       )}
       <div class="text-xs text-muted dark:text-muted-dark">
-        <time datetime={date.toISOString()}>{dateStr}</time>
+        <time datetime={publishedDate.toISOString()}>{dateStr}</time>
       </div>
     </div>
   </article>
