@@ -7,7 +7,7 @@ import CategoryBadge from "../components/CategoryBadge.astro";
 import ArticleSections from "../components/ArticleSections.astro";
 import TagChips from "../components/TagChips.astro";
 import CategoryVisual from "../components/CategoryVisual.astro";
-import type { Article } from "../lib/articles";
+import { getPublishedDate, type Article } from "../lib/articles";
 
 interface Props {
   article: Article;
@@ -33,7 +33,10 @@ const {
   clinicalSignificance,
 } = article.data;
 const slug = article.slug;
-const dateStr = date.toLocaleDateString("el-GR", { year: "numeric", month: "long", day: "numeric" });
+const publishedDate = getPublishedDate(article);
+const dateStr = publishedDate.toLocaleDateString("el-GR", { year: "numeric", month: "long", day: "numeric" });
+const sourceDateStr = date.toLocaleDateString("el-GR", { year: "numeric", month: "long", day: "numeric" });
+const showSourceDate = publishedDate.getTime() !== date.getTime();
 const primaryCondition = conditions?.[0];
 ---
 <BaseLayout
@@ -41,7 +44,7 @@ const primaryCondition = conditions?.[0];
   description={description || subtitle || title}
   canonicalPath={`/articles/${slug}/`}
   ogType="article"
-  publishedDate={date}
+  publishedDate={publishedDate}
   article={{ sourceUrl, doi }}
   containerClass="max-w-3xl"
 >
@@ -73,7 +76,13 @@ const primaryCondition = conditions?.[0];
         </div>
       )}
       <div class="mt-5 flex flex-wrap items-center gap-3 text-sm text-muted dark:text-muted-dark">
-        <time datetime={date.toISOString()}>{dateStr}</time>
+        <time datetime={publishedDate.toISOString()}>{dateStr}</time>
+        {showSourceDate && (
+          <>
+            <span aria-hidden="true">·</span>
+            <span>Μελέτη: {sourceDateStr}</span>
+          </>
+        )}
         <span aria-hidden="true">·</span>
         <span class="inline-flex items-center gap-1.5 rounded-full border border-border dark:border-border-dark px-2.5 py-0.5 text-xs">
           <span class="inline-block h-1.5 w-1.5 rounded-full bg-med" aria-hidden="true" />

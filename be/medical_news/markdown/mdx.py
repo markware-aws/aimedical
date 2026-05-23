@@ -17,6 +17,7 @@ class MdxFile:
 def build_mdx(raw: RawArticle, greek: GreekArticle, category: ArticleCategory) -> MdxFile:
     slug = slugify(greek["title_gr"]) or slugify(raw["title"]) or f"article-{date.today().isoformat()}"
     published_date = raw["published_date"] or date.today().isoformat()
+    site_published_at = date.today().isoformat()
     year = published_date[:4]
     path = f"fe/src/content/articles/{year}/{slug}.mdx"
 
@@ -30,6 +31,7 @@ def build_mdx(raw: RawArticle, greek: GreekArticle, category: ArticleCategory) -
     lines.extend(
         [
             f"date: {_yaml_string(published_date)}",
+            f"publishedAt: {_yaml_string(site_published_at)}",
             f"description: {_yaml_string(greek['description_gr'])}",
             f"category: {_yaml_string(category)}",
             "tags:",
