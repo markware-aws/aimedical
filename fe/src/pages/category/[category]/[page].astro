@@ -1,0 +1,65 @@
+---
+import BaseLayout from "../../../layouts/BaseLayout.astro";
+import ArticleCard from "../../../components/ArticleCard.astro";
+import Pagination from "../../../components/Pagination.astro";
+import { CATEGORIES, categoryLabel } from "../../../consts";
+import { getByCategory, type Article } from "../../../lib/articles";
+import { paginate, pageHref } from "../../../lib/pagination";
+
+export async function getStaticPaths() {
+  const paths = [];
+
+  for (const c of CATEGORIES) {
+    const articles = await getByCategory(c.slug);
+    const pages = paginate(articles);
+    const basePath = `/category/${c.slug}/`;
+
+    for (let index = 1; index < pages.length; index++) {
+      const currentPage = index + 1;
+      paths.push({
+        params: { category: c.slug, page: String(currentPage) },
+        props: {
+          articles: pages[index],
+          category: c.slug,
+          currentPage,
+          totalPages: pages.length,
+          totalArticles: articles.length,
+          basePath,
+        },
+      });
+    }
+  }
+
+  return paths;
+}
+
+interface Props {
+  articles: Article[];
+  category: string;
+  currentPage: number;
+  totalPages: number;
+  totalArticles: number;
+  basePath: string;
+}
+
+const { articles, category, currentPage, totalPages, totalArticles, basePath } = Astro.props;
+const label = categoryLabel(category);
+---
+<BaseLayout
+  title={`${label} · Άρθρα · Σελίδα ${currentPage}`}
+  description={`Άρθρα για AI στην κατηγορία: ${label}`}
+  canonicalPath={pageHref(basePath, currentPage)}
+>
+  <section class="mb-8 border-b border-border dark:border-border-dark pb-6">
+    <p class="text-xs font-semibold uppercase tracking-[0.2em] text-accent dark:text-accent-dark">
+      Κατηγορία
+    </p>
+    <h1 class="mt-2 text-3xl font-semibold tracking-tight md:text-4xl">{label}</h1>
+    <p class="mt-2 text-sm text-muted dark:text-muted-dark">{totalArticles} άρθρα</p>
+  </section>
+
+  <div class="grid gap-5 md:grid-cols-2 lg:grid-cols-3">
+    {articles.map((a) => <ArticleCard article={a} />)}
+  </div>
+  <Pagination basePath={basePath} currentPage={currentPage} totalPages={totalPages} />
+</BaseLayout>

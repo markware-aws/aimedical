@@ -1,33 +1,15 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
-import ArticleCard from "../components/ArticleCard.astro";
 import { CATEGORIES, categoryLabel } from "../consts";
 import { getPublishedArticles } from "../lib/articles";
+import { buildSearchIndex } from "../lib/search-index";
+import { PAGE_SIZE } from "../lib/pagination";
 
 const articles = await getPublishedArticles();
-const categoryOptions = CATEGORIES.filter((category) => articles.some((article) => article.data.category === category.slug));
-
-function normalizeSearch(value: string): string {
-  return value
-    .toLowerCase()
-    .normalize("NFD")
-    .replace(/[\u0300-\u036f]/g, "")
-    .replace(/ς/g, "σ");
-}
-
-const searchableArticles = articles.map((article) => {
-  const { title, originalTitle, description, subtitle, category, tags, conditions } = article.data;
-  const categoryGr = categoryLabel(category);
-  return {
-    article,
-    categoryGr,
-    searchText: normalizeSearch(
-      [title, originalTitle, description, subtitle, category, categoryGr, ...tags, ...(conditions ?? [])]
-        .filter(Boolean)
-        .join(" "),
-    ),
-  };
-});
+const searchIndex = buildSearchIndex(articles);
+const categoryOptions = CATEGORIES.filter((category) =>
+  articles.some((article) => article.data.category === category.slug)
+);
 ---
 <BaseLayout
   title="Αναζήτηση"
@@ -59,7 +41,6 @@ const searchableArticles = articles.map((article) => {
       <input
         id="search-page-input"
         type="search"
-        placeholder="π.χ. καρκίνος, radiology, Alzheimer, GPT"
         class="w-full bg-transparent text-base text-ink dark:text-ink-dark placeholder:text-muted dark:placeholder:text-muted-dark focus:outline-none"
         autocomplete="off"
       />
@@ -86,34 +67,70 @@ const searchableArticles = articles.map((article) => {
       ))}
     </div>
 
-    <p class="mt-4 text-sm text-muted dark:text-muted-dark">
-      <span id="search-count">{articles.length}</span> {articles.length === 1 ? "άρθρο" : "άρθρα"}
+    <p id="search-status" class="mt-4 text-sm text-muted dark:text-muted-dark">
+      Πληκτρολογήστε έναν όρο για να εμφανιστούν αποτελέσματα.
     </p>
   </section>
 
-  <section id="search-list" class="grid gap-4 md:grid-cols-2 lg:grid-cols-3" aria-live="polite">
-    {searchableArticles.map(({ article, categoryGr, searchText }) => (
-      <div data-search-item data-search-text={searchText} data-category={article.data.category}>
-        <ArticleCard article={article} />
-        <span class="sr-only">{categoryGr}</span>
-      </div>
-    ))}
-  </section>
+  <section id="search-list" class="grid gap-4 md:grid-cols-2 lg:grid-cols-3" aria-live="polite" hidden></section>
 
   <p id="search-empty-state" class="hidden rounded-lg border border-border dark:border-border-dark bg-surface dark:bg-surface-dark p-8 text-center text-muted dark:text-muted-dark">
     Δεν βρέθηκαν άρθρα για αυτή την αναζήτηση.
   </p>
+
+  <nav
+    id="search-pagination"
+    class="mt-10 hidden flex-wrap items-center justify-between gap-4 border-t border-border dark:border-border-dark pt-6"
+    aria-label="Σελιδοποίηση αποτελεσμάτων"
+  >
+    <p id="search-page-info" class="text-sm text-muted dark:text-muted-dark"></p>
+    <div class="flex items-center gap-2">
+      <button
+        type="button"
+        id="search-prev"
+        class="rounded-md border border-border dark:border-border-dark px-3 py-1.5 text-sm text-ink dark:text-ink-dark transition-colors hover:bg-surface dark:hover:bg-surface-dark disabled:cursor-not-allowed disabled:opacity-60"
+        disabled
+      >
+        ← Προηγούμενη
+      </button>
+      <button
+        type="button"
+        id="search-next"
+        class="rounded-md border border-border dark:border-border-dark px-3 py-1.5 text-sm text-ink dark:text-ink-dark transition-colors hover:bg-surface dark:hover:bg-surface-dark disabled:cursor-not-allowed disabled:opacity-60"
+        disabled
+      >
+        Επόμενη →
+      </button>
+    </div>
+  </nav>
 </BaseLayout>
+
+<script is:inline type="application/json" id="search-page-data" set:html={JSON.stringify({ articles: searchIndex, pageSize: PAGE_SIZE })} />
 
 <script is:inline>
   (function () {
+    var dataEl = document.getElementById("search-page-data");
     var input = document.getElementById("search-page-input");
-    var count = document.getElementById("search-count");
+    var status = document.getElementById("search-status");
+    var list = document.getElementById("search-list");
     var emptyState = document.getElementById("search-empty-state");
+    var pagination = document.getElementById("search-pagination");
+    var pageInfo = document.getElementById("search-page-info");
+    var prevBtn = document.getElementById("search-prev");
+    var nextBtn = document.getElementById("search-next");
     var buttons = Array.prototype.slice.call(document.querySelectorAll(".search-category"));
-    var items = Array.prototype.slice.call(document.querySelectorAll("[data-search-item]"));
+    if (!dataEl || !input || !status || !list || !emptyState || !pagination || !pageInfo || !prevBtn || !nextBtn) return;
+
+    var payload = JSON.parse(dataEl.textContent || "{}");
+    var pageSize = payload.pageSize || 24;
+    var articles = (payload.articles || []).map(function (article) {
+      article.normalizedSearchText = normalize(article.searchText);
+      return article;
+    });
+
     var activeCategory = "";
-    if (!input || !count || !emptyState) return;
+    var currentPage = 1;
+    var filtered = [];
 
     function normalize(value) {
       return String(value || "")
@@ -121,6 +138,49 @@ const searchableArticles = articles.map((article) => {
         .normalize("NFD")
         .replace(/[\u0300-\u036f]/g, "")
         .replace(/ς/g, "σ");
+    }
+
+    function clear(node) {
+      while (node.firstChild) node.removeChild(node.firstChild);
+    }
+
+    function renderCard(article) {
+      var link = document.createElement("a");
+      link.href = article.url;
+      link.className = "group block no-underline";
+
+      var card = document.createElement("article");
+      card.className = "card card-hover h-full overflow-hidden";
+
+      var inner = document.createElement("div");
+      inner.className = "p-5";
+
+      var badge = document.createElement("div");
+      badge.className = "mb-2 inline-flex rounded-full border border-border dark:border-border-dark px-2.5 py-0.5 text-xs font-medium text-ink dark:text-ink-dark";
+      badge.textContent = article.categoryGr;
+
+      var title = document.createElement("h3");
+      title.className = "mb-2 text-lg font-semibold leading-snug text-ink dark:text-ink-dark group-hover:text-accent dark:group-hover:text-accent-dark transition-colors";
+      title.textContent = article.title;
+
+      inner.appendChild(badge);
+      inner.appendChild(title);
+
+      if (article.description) {
+        var description = document.createElement("p");
+        description.className = "mb-4 line-clamp-2 text-sm leading-relaxed text-muted dark:text-muted-dark";
+        description.textContent = article.description;
+        inner.appendChild(description);
+      }
+
+      var date = document.createElement("div");
+      date.className = "text-xs text-muted dark:text-muted-dark";
+      date.textContent = article.date;
+      inner.appendChild(date);
+
+      card.appendChild(inner);
+      link.appendChild(card);
+      return link;
     }
 
     function setActiveButton(nextCategory) {
@@ -140,27 +200,77 @@ const searchableArticles = articles.map((article) => {
       });
     }
 
-    function filter() {
+    function computeFiltered() {
       var query = normalize(input.value);
-      var visible = 0;
-      items.forEach(function (item) {
-        var matchesQuery = !query || (item.getAttribute("data-search-text") || "").indexOf(query) !== -1;
-        var matchesCategory = !activeCategory || item.getAttribute("data-category") === activeCategory;
-        var show = matchesQuery && matchesCategory;
-        item.classList.toggle("hidden", !show);
-        if (show) visible += 1;
+      if (!query) return [];
+
+      return articles.filter(function (article) {
+        var matchesQuery = article.normalizedSearchText.indexOf(query) !== -1;
+        var matchesCategory = !activeCategory || article.category === activeCategory;
+        return matchesQuery && matchesCategory;
       });
-      count.textContent = String(visible);
-      emptyState.classList.toggle("hidden", visible > 0);
     }
 
-    input.addEventListener("input", filter);
+    function renderPage() {
+      clear(list);
+      var totalPages = Math.max(1, Math.ceil(filtered.length / pageSize));
+      if (currentPage > totalPages) currentPage = totalPages;
+      var start = (currentPage - 1) * pageSize;
+      var pageItems = filtered.slice(start, start + pageSize);
+
+      pageItems.forEach(function (article) {
+        list.appendChild(renderCard(article));
+      });
+
+      var hasQuery = normalize(input.value).length > 0;
+      list.hidden = !hasQuery || filtered.length === 0;
+      emptyState.classList.toggle("hidden", !hasQuery || filtered.length > 0);
+      pagination.classList.toggle("hidden", !hasQuery || filtered.length <= pageSize);
+
+      if (hasQuery && filtered.length > 0) {
+        status.textContent =
+          filtered.length === 1
+            ? "1 άρθρο"
+            : filtered.length + " άρθρα";
+        pageInfo.textContent = "Σελίδα " + currentPage + " από " + totalPages;
+      } else if (hasQuery) {
+        status.textContent = "Δεν βρέθηκαν άρθρα.";
+      } else {
+        status.textContent = "Πληκτρολογήστε έναν όρο για να εμφανιστούν αποτελέσματα.";
+      }
+
+      prevBtn.disabled = currentPage <= 1;
+      nextBtn.disabled = currentPage >= totalPages;
+    }
+
+    function runSearch() {
+      currentPage = 1;
+      filtered = computeFiltered();
+      renderPage();
+    }
+
+    input.addEventListener("input", runSearch);
     buttons.forEach(function (button) {
       button.addEventListener("click", function () {
         activeCategory = button.getAttribute("data-category") || "";
         setActiveButton(activeCategory);
-        filter();
+        runSearch();
       });
+    });
+    prevBtn.addEventListener("click", function () {
+      if (currentPage > 1) {
+        currentPage -= 1;
+        renderPage();
+        list.scrollIntoView({ behavior: "smooth", block: "start" });
+      }
+    });
+    nextBtn.addEventListener("click", function () {
+      var totalPages = Math.ceil(filtered.length / pageSize);
+      if (currentPage < totalPages) {
+        currentPage += 1;
+        renderPage();
+        list.scrollIntoView({ behavior: "smooth", block: "start" });
+      }
     });
   })();
 </script>

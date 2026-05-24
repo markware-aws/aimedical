@@ -1,0 +1,66 @@
+---
+import BaseLayout from "../../../layouts/BaseLayout.astro";
+import ArticleCard from "../../../components/ArticleCard.astro";
+import Pagination from "../../../components/Pagination.astro";
+import { CATEGORIES, categoryLabel } from "../../../consts";
+import { getByCategory, type Article } from "../../../lib/articles";
+import { paginate, pageHref } from "../../../lib/pagination";
+
+export async function getStaticPaths() {
+  return Promise.all(
+    CATEGORIES.map(async (c) => {
+      const articles = await getByCategory(c.slug);
+      const pages = paginate(articles);
+      return {
+        params: { category: c.slug },
+        props: {
+          articles: pages[0] ?? [],
+          category: c.slug,
+          currentPage: 1,
+          totalPages: pages.length,
+          totalArticles: articles.length,
+          basePath: `/category/${c.slug}/`,
+        },
+      };
+    }),
+  );
+}
+
+interface Props {
+  articles: Article[];
+  category: string;
+  currentPage: number;
+  totalPages: number;
+  totalArticles: number;
+  basePath: string;
+}
+
+const { articles, category, currentPage, totalPages, totalArticles, basePath } = Astro.props;
+const label = categoryLabel(category);
+---
+<BaseLayout
+  title={`${label} · Άρθρα`}
+  description={`Άρθρα για AI στην κατηγορία: ${label}`}
+  canonicalPath={pageHref(basePath, currentPage)}
+>
+  <section class="mb-8 border-b border-border dark:border-border-dark pb-6">
+    <p class="text-xs font-semibold uppercase tracking-[0.2em] text-accent dark:text-accent-dark">
+      Κατηγορία
+    </p>
+    <h1 class="mt-2 text-3xl font-semibold tracking-tight md:text-4xl">{label}</h1>
+    <p class="mt-2 text-sm text-muted dark:text-muted-dark">{totalArticles} άρθρα</p>
+  </section>
+
+  {totalArticles === 0 ? (
+    <p class="rounded-lg border border-border dark:border-border-dark bg-surface dark:bg-surface-dark p-8 text-center text-muted dark:text-muted-dark">
+      Δεν υπάρχουν άρθρα σε αυτή την κατηγορία ακόμη.
+    </p>
+  ) : (
+    <>
+      <div class="grid gap-5 md:grid-cols-2 lg:grid-cols-3">
+        {articles.map((a) => <ArticleCard article={a} />)}
+      </div>
+      <Pagination basePath={basePath} currentPage={currentPage} totalPages={totalPages} />
+    </>
+  )}
+</BaseLayout>

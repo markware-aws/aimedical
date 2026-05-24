@@ -1,27 +1,50 @@
 ---
+import { pageHref } from "../lib/pagination";
+
 interface Props {
-  prev?: { url: string; label?: string };
-  next?: { url: string; label?: string };
+  basePath: string;
+  currentPage: number;
+  totalPages: number;
 }
-const { prev, next } = Astro.props;
+
+const { basePath, currentPage, totalPages } = Astro.props;
+
+if (totalPages <= 1) return null;
+
+const prevPage = currentPage > 1 ? currentPage - 1 : null;
+const nextPage = currentPage < totalPages ? currentPage + 1 : null;
 ---
-{(prev || next) && (
-  <nav aria-label="Σελιδοποίηση" class="mt-12 flex items-center justify-between border-t border-border dark:border-border-dark pt-6 text-sm">
-    <div>
-      {prev ? (
-        <a href={prev.url} class="inline-flex items-center gap-2 no-underline text-ink dark:text-ink-dark hover:text-accent dark:hover:text-accent-dark">
-          <span aria-hidden="true">←</span>
-          <span>{prev.label ?? "Προηγούμενα"}</span>
-        </a>
-      ) : <span />}
-    </div>
-    <div>
-      {next ? (
-        <a href={next.url} class="inline-flex items-center gap-2 no-underline text-ink dark:text-ink-dark hover:text-accent dark:hover:text-accent-dark">
-          <span>{next.label ?? "Επόμενα"}</span>
-          <span aria-hidden="true">→</span>
-        </a>
-      ) : <span />}
-    </div>
-  </nav>
-)}
+<nav
+  class="mt-10 flex flex-wrap items-center justify-between gap-4 border-t border-border dark:border-border-dark pt-6"
+  aria-label="Σελιδοποίηση"
+>
+  <p class="text-sm text-muted dark:text-muted-dark">
+    Σελίδα {currentPage} από {totalPages}
+  </p>
+  <div class="flex items-center gap-2">
+    {prevPage ? (
+      <a
+        href={pageHref(basePath, prevPage)}
+        class="rounded-md border border-border dark:border-border-dark px-3 py-1.5 text-sm text-ink dark:text-ink-dark no-underline transition-colors hover:bg-surface dark:hover:bg-surface-dark"
+      >
+        ← Προηγούμενη
+      </a>
+    ) : (
+      <span class="rounded-md border border-border/60 dark:border-border-dark/60 px-3 py-1.5 text-sm text-muted dark:text-muted-dark opacity-60">
+        ← Προηγούμενη
+      </span>
+    )}
+    {nextPage ? (
+      <a
+        href={pageHref(basePath, nextPage)}
+        class="rounded-md border border-border dark:border-border-dark px-3 py-1.5 text-sm text-ink dark:text-ink-dark no-underline transition-colors hover:bg-surface dark:hover:bg-surface-dark"
+      >
+        Επόμενη →
+      </a>
+    ) : (
+      <span class="rounded-md border border-border/60 dark:border-border-dark/60 px-3 py-1.5 text-sm text-muted dark:text-muted-dark opacity-60">
+        Επόμενη →
+      </span>
+    )}
+  </div>
+</nav>
