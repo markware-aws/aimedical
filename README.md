@@ -42,6 +42,20 @@ Other scripts: `npm run build` (static build → `dist/`), `npm run preview`, `n
 
 See [`fe/README.md`](fe/README.md) for the layout, design system, and how to add an article by hand.
 
+#### Remove unpublished articles
+
+Articles with `published: false` are not rendered on the site. To find them:
+
+```bash
+grep -rl '^published:\s*false' fe/src/content/articles --include='*.mdx'
+```
+
+To delete them (preview the list above first):
+
+```bash
+grep -rl '^published:\s*false' fe/src/content/articles --include='*.mdx' | xargs rm
+```
+
 ### Backend (`be/`)
 
 ```powershell
