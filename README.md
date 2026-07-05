@@ -142,9 +142,6 @@ copy .env.example .env   # fill in real values
 python scripts/invoke_local.py
 ```
 
-> [!WARNING]
-> There is no mock mode. `python scripts/invoke_local.py` hits **real** PubMed/arXiv, OpenAI, GitHub, and DynamoDB, and will open a real draft PR. Use the `--dry-run` flag on the preview scripts (e.g. `python scripts/invoke_rss.py --dry-run`) to inspect candidates without side effects.
-
 Required environment variables (see `be/.env.example`): `OPENAI_API_KEY`, `OPENAI_MODEL`, `GITHUB_TOKEN`, `REPO_OWNER`, `REPO_NAME`, `REPO_DEFAULT_BRANCH`, `AWS_REGION`, `DYNAMODB_TABLE`.
 
 See [`be/README.md`](be/README.md) for all invoke scripts, the FDA/RSS feeds, deployment, and pipeline invariants.
