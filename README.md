@@ -1,30 +1,105 @@
-# AI Medical News
+# Medical AI Breakthroughs
 
 A Greek-language news site about artificial intelligence in medicine, paired with an automated content pipeline that sources, scores, and summarizes medical-AI research into publication-ready articles.
 
-The project has two halves:
+**Live site:** [aimedical.gr](https://aimedical.gr)
+
+## Screenshots
+
+| Homepage | Categories |
+| -------- | ---------- |
+| ![Homepage](docs/images/homepage.png) | ![Categories](docs/images/categories.png) |
+
+The frontend is a fully static Astro site — editorial layout, dark mode, category navigation, featured carousel, and RSS feed.
+
+## Project structure
 
 | Directory | What it is | Stack |
 | --------- | ---------- | ----- |
 | [`fe/`](fe/) | Static Greek news site (the public website) | Astro 5 + Tailwind 3 + MDX, deployed to S3 behind Cloudflare |
 | [`be/`](be/) | Content pipeline that generates the articles | Python 3.12 AWS Lambda |
 
-## How it works
+## AI pipeline
 
-The backend pipeline:
+A single Python Lambda (`medical_news.handlers.orchestrator.handler`) runs the full content pipeline. It is triggered on a schedule (every 6 hours via EventBridge) and can also be invoked locally via the scripts in `be/scripts/`.
 
 ```
-fetch (PubMed + arXiv + RSS + FDA)
+fetch (PubMed + arXiv + curated RSS)
   → dedupe (DynamoDB)
   → relevance score (OpenAI)
-  → Translate (Deepl)
   → Greek article generation (OpenAI)
   → MDX file
   → GitHub PR (draft)
   → mark processed (DynamoDB)
 ```
 
-Each run opens a draft GitHub pull request adding new `.mdx` files to `fe/src/content/articles/`. **PR review is the quality gate** — a human reviews the generated content before merging. Once merged to `main`, a GitHub Actions workflow builds the frontend and syncs it to S3.
+### 1. Fetch
+
+The orchestrator pulls recent candidates from three scheduled sources:
+
+| Source | Module | What it fetches |
+| ------ | ------ | --------------- |
+| PubMed | `medical_news/feeds/pubmed.py` | Medical-AI papers via NCBI E-utilities |
+| arXiv | `medical_news/feeds/arxiv.py` | Preprints in relevant CS/bio categories |
+| RSS | `medical_news/feeds/rss.py` | Curated journal and society feeds |
+
+Additional invoke scripts cover one-off batches that bypass the default fetch:
+
+- `invoke_topic.py` — ad-hoc PubMed/arXiv query
+- `invoke_rss.py` — RSS-only run
+- `invoke_disease_advances.py` — curated disease/society breakthrough feeds (skips relevance scoring)
+- `invoke_fda_drugs.py` — FDA Drugs@FDA approvals via openFDA (skips relevance scoring)
+
+### 2. Dedupe
+
+Each article gets a stable key in DynamoDB (`aimedical_articles`):
+
+- Prefer DOI: `ARTICLE#10.xxxx/...`
+- Fallback: `ARTICLE#<source>#<sourceId>`
+
+Already-processed articles are skipped. Low-relevance articles are also recorded so they are not re-scored on every run.
+
+### 3. Relevance scoring (OpenAI)
+
+`medical_news/ai/relevance.py` sends title + abstract to the model and returns:
+
+```json
+{ "relevant": true, "score": 8, "category": "oncology", "reason": "..." }
+```
+
+Scoring dimensions: medical relevance, AI relevance, public interest, novelty, readability. Articles below `RELEVANCE_MIN_SCORE` (default **7**) are dropped. The model also assigns one of 14 clinical categories (oncology, cardiology, neurology, llms, drug-discovery, etc.).
+
+FDA and disease-advance batches skip this step and use a fixed category override instead.
+
+### 4. Greek article generation (OpenAI)
+
+`medical_news/ai/generator.py` produces a structured `GreekArticle` JSON object:
+
+- Greek title, subtitle, SEO description
+- Body with standard sections (`## Τι συνέβη`, `## Γιατί έχει σημασία`)
+- Tags, conditions, key findings, study limitations, clinical significance
+
+Editorial guardrails are enforced in `medical_news/ai/prompts.py`:
+
+- No sensationalism or hype language
+- Always mention study limitations
+- Never generate medical advice
+- Distinguish peer-reviewed from preprints
+- Write naturally in Greek, not as a translation
+
+### 5. MDX + GitHub PR
+
+`medical_news/markdown/mdx.py` builds a frontmatter-compliant `.mdx` file and commits it to `fe/src/content/articles/<year>/<slug>.mdx` via the GitHub API.
+
+Each run opens a **draft pull request** (one PR per article, or a single batch PR when `GITHUB_BATCH_PR` is set). **PR review is the quality gate** — a human reviews the generated content before merging.
+
+### 6. Deploy
+
+Once merged to `main`, the GitHub Actions workflow (`.github/workflows/deploy.yml`) builds the Astro site and syncs `dist/` to S3. Cloudflare CDN serves the static output.
+
+```
+Lambda (every 6h)  →  draft PR  →  human review  →  merge to main  →  S3 deploy
+```
 
 ## Running locally
 
@@ -78,8 +153,9 @@ See [`be/README.md`](be/README.md) for all invoke scripts, the FDA/RSS feeds, de
 
 ```
 .
-├── fe/      Astro frontend (the website)
-├── be/      Python Lambda content pipeline
-├── docs/    plan.md, UI spec, ops notes
-└── .github/ deploy + scheduling workflows
+├── fe/              Astro frontend (the website)
+├── be/              Python Lambda content pipeline
+├── docs/
+│   └── images/      README screenshots
+└── .github/         deploy + scheduling workflows
 ```
