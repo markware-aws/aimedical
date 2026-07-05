@@ -6,11 +6,11 @@ A Greek-language news site about artificial intelligence in medicine, paired wit
 
 ## Screenshots
 
-| Homepage | Categories |
-| -------- | ---------- |
-| ![Homepage](docs/images/homepage.png) | ![Categories](docs/images/categories.png) |
+| Homepage | Category page | Search |
+| -------- | ------------- | ------ |
+| ![Homepage](docs/images/homepage.png) | ![Oncology category](docs/images/category-oncology.png) | ![Search](docs/images/search.png) |
 
-The frontend is a fully static Astro site — editorial layout, dark mode, category navigation, featured carousel, and RSS feed.
+The frontend is a fully static Astro site — editorial layout, dark mode, category navigation, featured carousel, local search, and RSS feed.
 
 ## Project structure
 
