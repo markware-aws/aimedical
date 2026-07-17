@@ -1,0 +1,48 @@
+---
+title: "Probe εντοπίζει έγκαιρα hallucinations σε ιατρικά LLMs"
+originalTitle: "Real-time hallucination detection and intervention in medical LLMs via calibrated hidden-state probes."
+subtitle: "Το calibrated hidden-state probe σηματοδοτεί κίνδυνο πριν από το σφάλμα και λειτουργεί με χαμηλή καθυστέρηση σε ιατρικά LLMs."
+date: "2026-07-14"
+description: "Ένα calibrated hidden-state probe ανιχνεύει έγκαιρα hallucinations σε ιατρικά LLMs, με έλεγχο false-positive rate και χαμηλή καθυστέρηση σε streaming κλινική χρήση."
+category: "llms"
+tags:
+  - "llm"
+  - "hallucination"
+  - "clinical-ai"
+  - "probes"
+  - "patient-safety"
+keyFindings:
+  - "Το σύστημα ταξινομεί κάθε παραγόμενο token σε Safe, AtRisk ή Hallucinating."
+  - "Η ανίχνευση γίνεται με calibrated hidden-state probing και όριο στο false-positive rate."
+  - "Σε τέσσερα ιατρικά QA benchmarks δοκιμάστηκε σε περίπου 44.500 trajectories."
+  - "Το σήμα ενεργοποιείται περίπου 10-35 tokens πριν από την έναρξη του σφάλματος."
+  - "Η καθυστέρηση αναφέρεται περίπου 10 ms ανά απάντηση, έναντι περίπου 10 s για multi-sample baselines."
+conditions:
+  - "ιατρικά LLMs"
+  - "κλινική τεχνητή νοημοσύνη"
+  - "hallucinations"
+studyLimitations: "Πρόκειται για μεθοδολογική μελέτη σε benchmarks και όχι για κλινική εφαρμογή σε πραγματικό περιβάλλον. Το Endoscopy corpus της μίας κλινικής μονάδας είχε μικρό αριθμό επιβεβαιωμένα σωστών παραδειγμάτων, με ευρείες διαστήματα εμπιστοσύνης."
+clinicalSignificance: "Η προσέγγιση δείχνει πώς τα ιατρικά LLMs θα μπορούσαν να παρακολουθούνται σε πραγματικό χρόνο πριν παράγουν λανθασμένη πληροφορία. Αυτό είναι ιδιαίτερα σχετικό για ροές εργασίας όπου η καθυστέρηση και η έγκαιρη προειδοποίηση έχουν σημασία."
+sourceUrl: "https://pubmed.ncbi.nlm.nih.gov/42447946/"
+doi: "10.1016/j.jbi.2026.105081"
+source: "pubmed"
+published: true
+generated: true
+featured: false
+---
+## Τι συνέβη
+Οι συγγραφείς περιγράφουν ένα calibrated hidden-state probing pipeline για την έγκαιρη ανίχνευση hallucinations σε ιατρικά LLMs. Η ιδέα είναι να αξιολογείται ο κίνδυνος token προς token, αντί να γίνεται μόνο εκ των υστέρων έλεγχος του τελικού κειμένου.
+
+Το σύστημα χωρίζει την πρόβλεψη σε τρεις καταστάσεις κινδύνου: Safe, AtRisk και Hallucinating. Σύμφωνα με τους συγγραφείς, αυτό επιτρέπει ένα σήμα προειδοποίησης πριν από την εμφάνιση του σφάλματος.
+
+Η αξιολόγηση έγινε σε τέσσερα medical QA benchmarks, με τρία διαφορετικά backbone LLMs. Η εργασία δημοσιεύτηκε στο Journal of Biomedical Informatics και είναι peer-reviewed άρθρο, όχι preprint.
+
+## Γιατί έχει σημασία
+Στα κλινικά περιβάλλοντα, η αξία δεν είναι μόνο να εντοπίζεται ένα λάθος, αλλά να εντοπίζεται αρκετά νωρίς ώστε να μπορεί να παρακολουθείται η παραγωγή του μοντέλου σε πραγματικό χρόνο. Αυτό ακριβώς επιχειρεί να κάνει η συγκεκριμένη προσέγγιση.
+
+Η μελέτη δίνει έμφαση και στην πρακτική πλευρά της καθυστέρησης. Οι συγγραφείς αναφέρουν ότι η μέθοδος είναι πολύ ταχύτερη από multi-sample baselines, κάτι που τη φέρνει πιο κοντά σε streaming εφαρμογές.
+
+## Σχόλιο
+Το ενδιαφέρον της εργασίας είναι ότι δεν περιορίζεται σε ένα μεμονωμένο detector, αλλά προτείνει ένα modular πρωτόκολλο για supervision construction, training και calibration. Αυτό διευκολύνει τη χρήση της ίδιας λογικής με διαφορετικούς verifiers ή detectors.
+
+Παράλληλα, η εικόνα από το Endoscopy corpus παρουσιάζεται ως ενδεικτική case study, όχι ως οριστική απόδειξη κλινικής χρησιμότητας. Οι συγγραφείς το αναγνωρίζουν έμμεσα μέσω του μικρού επιβεβαιωμένα σωστού δείγματος.
