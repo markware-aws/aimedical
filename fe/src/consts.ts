@@ -3,6 +3,9 @@ export const SITE_TAGLINE =
   "Ενημέρωση για τις νέες εφαρμογές της τεχνητής νοημοσύνης στην ιατρική";
 export const SITE_URL = import.meta.env.SITE ?? "https://aimedical.gr";
 
+/** Google Analytics 4 measurement ID. Loaded only after cookie consent. */
+export const GA_MEASUREMENT_ID = "G-1441Q46DNN";
+
 export const CATEGORIES = [
   { slug: "oncology", labelGr: "Ογκολογία" },
   { slug: "cardiology", labelGr: "Καρδιολογία" },

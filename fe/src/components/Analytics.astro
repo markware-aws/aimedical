@@ -1,0 +1,41 @@
+---
+import { GA_MEASUREMENT_ID } from "../consts";
+---
+{GA_MEASUREMENT_ID && (
+  <script is:inline define:vars={{ GA_MEASUREMENT_ID }}>
+    (function () {
+      var KEY = "cookie-consent";
+      var loaded = false;
+
+      function loadGa() {
+        if (loaded || !GA_MEASUREMENT_ID) return;
+        loaded = true;
+
+        var s = document.createElement("script");
+        s.async = true;
+        s.src = "https://www.googletagmanager.com/gtag/js?id=" + GA_MEASUREMENT_ID;
+        document.head.appendChild(s);
+
+        window.dataLayer = window.dataLayer || [];
+        window.gtag = function () {
+          window.dataLayer.push(arguments);
+        };
+        window.gtag("js", new Date());
+        window.gtag("config", GA_MEASUREMENT_ID, { anonymize_ip: true });
+      }
+
+      function maybeLoad() {
+        var choice;
+        try {
+          choice = localStorage.getItem(KEY);
+        } catch (e) {}
+        if (choice === "accept") loadGa();
+      }
+
+      maybeLoad();
+      document.addEventListener("cookie-consent-change", function (e) {
+        if (e.detail && e.detail.choice === "accept") loadGa();
+      });
+    })();
+  </script>
+)}
